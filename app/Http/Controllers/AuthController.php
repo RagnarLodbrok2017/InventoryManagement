@@ -4,24 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\User;
+use Illuminate\Support\Facades\Hash;
+use DB;
 
 class AuthController extends Controller
 {
-     /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login','signup']]);
     }
 
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function login()
     {
         $credentials = request(['email', 'password']);
@@ -33,21 +28,13 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function me()
     {
         return response()->json(auth()->user());
     }
 
-    /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     public function logout()
     {
         auth()->logout();
@@ -55,11 +42,6 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function refresh()
     {
         return $this->respondWithToken(auth()->refresh());
@@ -79,5 +61,26 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
+    }
+    public function signup(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|unique:users|min:10|max:255',
+            'name' => 'required|min:2|max:255',
+            'password' => 'required|confirmed|min:6|max:255',
+        ]);
+        User::create([
+            'name' => $request['name'],
+            'email' =>$request['email'],
+            'password' =>Hash::make( $request['password'] ),
+        ]);
+            // $user['name'] = $request['name'];
+            // $user['email'] = $request['email'];
+            // $user['password'] = Hash::make( $request['password'] );
+            // DB::table('users')->insert($user);
+            // // response()->json(['message' => 'Register Successful']);
+             return $this->login($request);
+
+
     }
 }
