@@ -2,6 +2,7 @@ let dashboardComponent =  require('./components/dashboard/DashboardComponent.vue
 let loginComponent =  require('./components/auth/LoginComponent.vue').default;
 let registerComponent =  require('./components/auth/RegisterComponent.vue').default;
 let forgetPasswordComponent =  require('./components/auth/ForgetPasswordComponent.vue').default;
+let homeComponent = require('./components/HomeComponent.vue').default;
 
 
 
@@ -28,5 +29,13 @@ export const routes = [
         path:'/',
         name : '/',
         component:dashboardComponent
+    },
+    {
+        path:'/home',
+        name : 'home',
+        component:homeComponent,
+        meta: {
+            middleware: [auth],
+          },
     }
 ]

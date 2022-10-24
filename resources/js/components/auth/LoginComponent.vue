@@ -54,11 +54,11 @@
 
 <script type="text/javascript">
 export default {
-    created() {
-        if (User.loggedIn()) {
-            this.$router.push({ name: "home" });
-        }
-    },
+    // created() {
+    //     if (User.loggedIn()) {
+    //         this.$router.push({ name: "home" });
+    //     }
+    // },
 
     data() {
         return {
@@ -70,26 +70,18 @@ export default {
         };
     },
     methods: {
-        login() {
-            axios
-                .post("/api/auth/login", this.form)
-                .then((res) => {
-                    User.responseAfterLogin(res);
-                    Toast.fire({
-                        icon: "success",
-                        title: "Signed in successfully",
-                    });
-                    this.$router.push({ name: "home" });
-                })
+        login()
+        {
+            axios.post("api/auth/login", this.form)
+            .then((res) => {
+                console.log(res.data);
+                this.$router.push({ name: "home" });
+            })
+            .catch((error) => {
+                console.log(error.data);
+            });
+        }
 
-                .catch((error) => (this.errors = error.response.data.errors))
-                .catch(
-                    Toast.fire({
-                        icon: "warning",
-                        title: "Invalid Email or Password",
-                    })
-                );
-        },
     },
 };
 </script>
