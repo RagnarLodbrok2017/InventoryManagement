@@ -12,6 +12,10 @@ import {routes} from './routes'
 
 Vue.use(VueRouter)
 
+//Import User Helper to be globally
+import User from './Helpers/User'
+window.User = User;
+
 const router = new VueRouter({
     routes,
     mode:'history'

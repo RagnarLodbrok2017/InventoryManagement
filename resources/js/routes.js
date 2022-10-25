@@ -34,8 +34,8 @@ export const routes = [
         path:'/home',
         name : 'home',
         component:homeComponent,
-        meta: {
-            middleware: [auth],
-          },
+        // meta: {
+        //     middleware: [auth],
+        //   },
     }
 ]
