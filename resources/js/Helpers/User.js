@@ -31,7 +31,7 @@ class User {
     }
     loggedIn()
     {
-        this.hasToken();
+        return this.hasToken();
     }
     getName()
     {

@@ -77,11 +77,11 @@
 
 <script type="text/javascript">
 export default {
-  // created() {
-  //     if (User.loggedIn()) {
-  //         this.$router.push({ name: "home" });
-  //     }
-  // },
+  created() {
+      if (User.loggedIn()) {
+          this.$router.push({ name: "home" });
+      }
+  },
 
   data() {
     return {
@@ -99,7 +99,7 @@ export default {
         .then((res) => {
           //   console.log(res.data);
           User.responeAfterLogin(res);
-          // this.$router.push({ name: "home" });
+          this.$router.push({ name: "home" });
         })
         .catch((error) => console.log(error.response.data.error));
     },
