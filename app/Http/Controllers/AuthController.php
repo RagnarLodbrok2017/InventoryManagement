@@ -18,12 +18,17 @@ class AuthController extends Controller
     }
 
 
-    public function login()
+    public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|min:5|max:255|email:rfc,dns',
+            'password'=> 'required|min:5|max:255'
+        ]);
+
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => '(email) or (password) is invalid'], 401);
+            return response()->json(['error' => 'Invalid Email or Password'], 401);
         }
 
         return $this->respondWithToken($token);

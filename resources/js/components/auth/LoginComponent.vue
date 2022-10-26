@@ -18,10 +18,9 @@
                       aria-describedby="emailHelp"
                       placeholder="Enter Email Address"
                       v-model="form.email"
+                      required=""
                     />
-                    <small class="text-danger" v-if="errors.email">
-                      {{ errors.email[0] }}
-                    </small>
+                    <small class="text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
                   </div>
                   <div class="form-group">
                     <input
@@ -30,6 +29,7 @@
                       id="exampleInputPassword"
                       placeholder="Password"
                       v-model="form.password"
+                      required=""
                     />
                     <small class="text-danger" v-if="errors.password">
                       {{ errors.password[0] }}
@@ -99,9 +99,19 @@ export default {
         .then((res) => {
           //   console.log(res.data);
           User.responeAfterLogin(res);
+            Toast.fire({
+                icon: 'success',
+                title: 'Signed in successfully'
+            });
           this.$router.push({ name: "home" });
         })
-        .catch((error) => console.log(error.response.data.error));
+          .catch(error =>this.errors = error.response.data.errors)
+          .catch(
+              Toast.fire({
+                icon: 'warning',
+                title: 'Invalid Email or Password',
+            })
+          )
     },
   },
 };
