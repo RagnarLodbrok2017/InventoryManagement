@@ -11,28 +11,46 @@
                                 </div>
                                 <form class="user" @submit.prevent="signup">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Full Name" v-model="form.name" />
+                                        <input type="text" class="form-control" id="exampleInputFirstName"
+                                               placeholder="Enter Your Full Name" v-model="form.name"/>
+                                        <small class="text-danger" v-if="errors.name">
+                                            {{ errors.name[0] }}
+                                        </small>
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address" v-model="form.email" />
+                                        <input type="email" class="form-control" id="exampleInputEmail"
+                                               aria-describedby="emailHelp" placeholder="Enter Email Address"
+                                               v-model="form.email"/>
+                                        <small class="text-danger" v-if="errors.email">
+                                            {{ errors.email[0] }}
+                                        </small>
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" class="form-control" id="exampleInputPassword" placeholder="Password" v-model="form.password" />
+                                        <input type="password" class="form-control" id="exampleInputPassword"
+                                               placeholder="Password" v-model="form.password"/>
+                                        <small class="text-danger" v-if="errors.password">
+                                            {{ errors.password[0] }}
+                                        </small>
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="password" class="form-control" id="exampleInputPasswordRepeat" placeholder="Confirm Password" v-model="form.password_confirmation" />
+                                        <input type="password" class="form-control" id="exampleInputPasswordRepeat"
+                                               placeholder="Confirm Password" v-model="form.password_confirmation"/>
+                                        <small class="text-danger" v-if="errors.password_confirmation" confirmed="">
+                                            {{ errors.password_confirmation[0] }}
+                                        </small>
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary btn-block">
-                            Register
-                          </button>
+                                            Register
+                                        </button>
                                     </div>
                                 </form>
-                                <hr />
+                                <hr/>
                                 <div class="text-center">
-                                    <router-link to="/login" class="font-weight-bold small">Already have an account?</router-link>
+                                    <router-link to="/login" class="font-weight-bold small">Already have an account?
+                                    </router-link>
                                 </div>
                                 <div class="text-center"></div>
                             </div>
@@ -48,36 +66,42 @@
 export default {
     created() {
         if (User.loggedIn()) {
-            this.$router.push({ name: "home" });
+            this.$router.push({name: "home"});
         }
     },
 
     data() {
         return {
-            form: {
-                name: null,
-                email: null,
-                password: null,
-                confirm_password: null,
+            form:{
+                name:null,
+                email:null,
+                password:null,
+                password_confirmation:null
             },
-            errors: {},
+            errors:{},
         };
     },
     methods: {
-        signup() {
-            axios
-                .post("/api/auth/signup", this.form)
-                .then((res) => {
-                    User.responseAfterLogin(res);
+        signup()
+        {
+            axios.post("http://127.0.0.1:8000/api/auth/signup" ,this.form)
+                .then(res =>{
+                    User.responeAfterLogin(res);
                     Toast.fire({
-                        icon: "success",
-                        title: "Signed in successfully",
+                        icon: 'success',
+                        title: 'you registered successfully'
                     });
-                    this.$router.push({ name: "home" });
+                    this.$router.push({name: "home"});
+                    // console.log(res.data);
                 })
-
-                .catch((error) => (this.errors = error.response.data.errors));
-        },
+                .catch(error => this.errors = error.response.data.errors)
+                .catch(
+                    Toast.fire({
+                        icon: 'warning',
+                        title: "you can't register",
+                    })
+                )
+        }
     },
 };
 </script>

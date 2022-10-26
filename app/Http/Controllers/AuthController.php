@@ -14,20 +14,20 @@ class AuthController extends Controller
     public function __construct()
     {
         // $this->middleware('auth:api', ['except' => ['login','signup']]);
-        $this->middleware('JWT', ['except' => ['login','signup']]);
+        $this->middleware('JWT', ['except' => ['login', 'signup']]);
     }
 
 
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|min:5|max:255|email:rfc,dns',
-            'password'=> 'required|min:5|max:255'
+            'email' => 'required|max:255',
+            'password' => 'required|min:5|max:255'
         ]);
 
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Invalid Email or Password'], 401);
         }
 
@@ -56,7 +56,7 @@ class AuthController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -68,27 +68,31 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60,
             'name' => auth()->user()->name,
             'email' => auth()->user()->email,
-            'user_id'=> auth()->user()->id,
+            'user_id' => auth()->user()->id,
         ]);
     }
+
     public function signup(Request $request)
     {
         $request->validate([
-            'email' => 'required|unique:users|min:10|max:255',
+            'email' => 'required|unique:users|max:255',
             'name' => 'required|min:2|max:255',
             'password' => 'required|confirmed|min:6|max:255',
         ]);
-        User::create([
-            'name' => $request['name'],
-            'email' =>$request['email'],
-            'password' =>Hash::make( $request['password'] ),
-        ]);
-            // $user['name'] = $request['name'];
-            // $user['email'] = $request['email'];
-            // $user['password'] = Hash::make( $request['password'] );
-            // DB::table('users')->insert($user);
-            // // response()->json(['message' => 'Register Successful']);
-             return $this->login($request);
+//        User::create([
+//            'name' => $request['name'],
+//            'email' =>$request['email'],
+//            'password' =>Hash::make( $request['password'] ),
+//        ]);
+        $user = array();
+        $user['name'] = $request['name'];
+        $user['email'] = $request['email'];
+        $user['password'] = Hash::make($request['password']);
+        DB::table('users')->insert($user);
+        // // response()->json(['message' => 'Register Successful']);
+        //return $this->login($request);
+//        return response()->json(['error' => 'Registeration error'], 401);
+        return $this->login($request);
 
 
     }

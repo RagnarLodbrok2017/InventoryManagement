@@ -40,6 +40,10 @@ class User {
             return AppStorage.getUser();
         }
     }
+    logout()
+    {
+        return AppStorage.clear();
+    }
 
 
 }

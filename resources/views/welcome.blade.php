@@ -19,6 +19,8 @@
 <body id="page-top">
     <div id="app">
         <div id="wrapper">
+
+
             <!-- Sidebar -->
             <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
                 <router-link to="/" class="sidebar-brand d-flex align-items-center justify-content-center" >
@@ -294,7 +296,9 @@
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <img class="img-profile rounded-circle" src="{{ asset('backend/img/boy.png') }}"
                                         style="max-width: 60px">
-                                    <span class="ml-2 d-none d-lg-inline text-white small">Maman Ketoprak</span>
+                                    <router-link to="/logout" class="ml-2 d-none d-lg-inline text-white small">
+                                        Logout
+                                    </router-link>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                     aria-labelledby="userDropdown">
