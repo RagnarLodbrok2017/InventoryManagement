@@ -32,9 +32,9 @@ export const routes = [
         component:dashboardComponent
     },
     {
-        path:'/home',
-        name : 'home',
-        component:homeComponent,
+        path:'/dashboard',
+        name : 'dashboard',
+        component:dashboardComponent,
         // meta: {
         //     middleware: [auth],
         //   },

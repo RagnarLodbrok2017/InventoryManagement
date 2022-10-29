@@ -44,6 +44,17 @@ class User {
     {
         return AppStorage.clear();
     }
+    isAuthenticated()
+    {
+        if (!this.loggedIn()) {
+            return true;
+        }
+        else{
+            return false;
+        }
+
+
+    }
 
 
 }

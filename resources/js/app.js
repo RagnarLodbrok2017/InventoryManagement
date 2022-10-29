@@ -32,6 +32,10 @@ const Toast = Swal.mixin({
 });
 window.Toast = Toast;
 
+//import Notification Helpers
+import Notification from './Helpers/Notifications';
+window.Notification = Notification;
+
 const router = new VueRouter({
     routes,
     mode:'history'
