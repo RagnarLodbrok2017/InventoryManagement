@@ -8,7 +8,7 @@ class Notification {
             timeout:1000,
         }).show();
 
-    }
+    };
     alert()
     {
         new Noty({
@@ -18,7 +18,7 @@ class Notification {
             timeout:1000,
         }).show();
 
-    }
+    };
     error()
     {
         new Noty({
@@ -27,7 +27,7 @@ class Notification {
             text: 'Something went wrong?!',
             timeout:1000,
         }).show();
-    }
+    };
     warning()
     {
         new Noty({
@@ -35,6 +35,15 @@ class Notification {
             layout: 'topRight',
             text: 'Oops Wrong!',
             timeout:1000,
+        }).show();
+    };
+    Image_validation()
+    {
+        new Noty({
+            type: 'error',
+            layout: 'topRight',
+            text: 'Uploaded image big than 2MB!',
+            timeout:1500,
         }).show();
     }
 

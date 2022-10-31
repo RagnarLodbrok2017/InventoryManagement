@@ -91,12 +91,13 @@
                                     <div class="col-6">
                                         <label for="Photo">Upload Photo :</label>
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="customFile" />
+                                            <input type="file" class="custom-file-input" id="customFile"
+                                             @change="onFileSelected" />
                                             <label class="custom-file-label" for="customFile">Choose file</label>
                                         </div>
                                     </div>
                                     <div class="col-3">
-                                        <img src="form.photo" style="height: 100px; width: 120px" />
+                                        <img :src="form.photo" style="height: 100px; width: 120px" />
                                     </div>
                                     <div class="col-3">
                                         <small v-if="errors.photo" class="text-danger">
@@ -144,8 +145,8 @@ export default {
             errors:{},
         };
     },
-    methood() {
-        createEmployee($request);
+    methods:{
+        createEmployee($request)
         {
             axios
                 .post("/employee/store-employee", this.form)
@@ -157,6 +158,22 @@ export default {
                     });
                 })
                 .catch();
+        },
+        onFileSelected(event)
+        {
+            let file = event.target.files[0];
+            if(file.size > 200473)
+            {
+                Notification.Image_validation();
+            }
+            else{
+                console.log(event.target.files[0].size);
+                let render = new FileReader();
+                render.onload = event => {
+                    this.form.photo = event.target.result;
+                };
+                render.readAsDataURL(file);
+            }
         }
     },
 };

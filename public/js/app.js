@@ -2127,9 +2127,8 @@ __webpack_require__.r(__webpack_exports__);
       errors: {}
     };
   },
-  methood: function methood() {
-    createEmployee($request);
-    {
+  methods: {
+    createEmployee: function createEmployee($request) {
       axios.post("/employee/store-employee", this.form).then(function (res) {
         console.log(res.data);
         Toast.fire({
@@ -2137,6 +2136,20 @@ __webpack_require__.r(__webpack_exports__);
           title: "Employee Created Successfully"
         });
       })["catch"]();
+    },
+    onFileSelected: function onFileSelected(event) {
+      var _this = this;
+      var file = event.target.files[0];
+      if (file.size > 200473) {
+        Notification.Image_validation();
+      } else {
+        console.log(event.target.files[0].size);
+        var render = new FileReader();
+        render.onload = function (event) {
+          _this.form.photo = event.target.result;
+        };
+        render.readAsDataURL(file);
+      }
     }
   }
 });
@@ -3942,21 +3955,7 @@ var render = function render() {
     staticClass: "form-group"
   }, [_c("div", {
     staticClass: "form-row"
-  }, [_vm._m(0), _vm._v(" "), _vm._m(1), _vm._v(" "), _c("div", {
-    staticClass: "col-3"
-  }, [_vm.errors.photo ? _c("small", {
-    staticClass: "text-danger"
-  }, [_vm._v("\n                                        " + _vm._s(_vm.errors.photo[0]) + "\n                                    ")]) : _vm._e()])])]), _vm._v(" "), _vm._m(2), _vm._v(" "), _c("button", {
-    staticClass: "btn btn-primary",
-    attrs: {
-      type: "submit"
-    }
-  }, [_vm._v("Submit")])])])])])])]);
-};
-var staticRenderFns = [function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
+  }, [_c("div", {
     staticClass: "col-6"
   }, [_c("label", {
     attrs: {
@@ -3969,17 +3968,16 @@ var staticRenderFns = [function () {
     attrs: {
       type: "file",
       id: "customFile"
+    },
+    on: {
+      change: _vm.onFileSelected
     }
   }), _vm._v(" "), _c("label", {
     staticClass: "custom-file-label",
     attrs: {
       "for": "customFile"
     }
-  }, [_vm._v("Choose file")])])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
+  }, [_vm._v("Choose file")])])]), _vm._v(" "), _c("div", {
     staticClass: "col-3"
   }, [_c("img", {
     staticStyle: {
@@ -3987,10 +3985,20 @@ var staticRenderFns = [function () {
       width: "120px"
     },
     attrs: {
-      src: "form.photo"
+      src: _vm.form.photo
     }
-  })]);
-}, function () {
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "col-3"
+  }, [_vm.errors.photo ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                        " + _vm._s(_vm.errors.photo[0]) + "\n                                    ")]) : _vm._e()])])]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      type: "submit"
+    }
+  }, [_vm._v("Submit")])])])])])])]);
+};
+var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
@@ -61757,6 +61765,16 @@ var Notification = /*#__PURE__*/function () {
         layout: 'topRight',
         text: 'Oops Wrong!',
         timeout: 1000
+      }).show();
+    }
+  }, {
+    key: "Image_validation",
+    value: function Image_validation() {
+      new Noty({
+        type: 'error',
+        layout: 'topRight',
+        text: 'Uploaded image big than 2MB!',
+        timeout: 1500
       }).show();
     }
   }]);
