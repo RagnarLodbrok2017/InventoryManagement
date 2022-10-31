@@ -52,7 +52,7 @@
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Employees Control</h6>
                                 <router-link to="/dashboard/create-employee" class="collapse-item">Add Employees</router-link>
-                                <router-link to="/index-employees" class="collapse-item">All Employees</router-link>
+                                <router-link to="/dashboard/index-employee" class="collapse-item">All Employees</router-link>
                             </div>
                         </div>
                     </li>

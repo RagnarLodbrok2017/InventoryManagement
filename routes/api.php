@@ -28,6 +28,8 @@ Route::group([
     Route::post('me', 'AuthController@me');
 });
 
+Route::apiResource('/dashboard/employee', 'Api/EmployeeController');
+
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('home', 'AuthController@home');
 //     });

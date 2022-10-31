@@ -65,8 +65,8 @@ export const routes = [
         component: CreateEmployeeComponent
     },
     {
-        path:'/dashborard/index-employees',
-        name : 'index-employees',
+        path:'/dashboard/index-employee',
+        name : 'index-employee',
         component: IndexEmployeeComponent
     },
     // {
