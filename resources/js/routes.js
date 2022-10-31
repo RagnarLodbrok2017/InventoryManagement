@@ -4,6 +4,9 @@ let registerComponent =  require('./components/auth/RegisterComponent.vue').defa
 let forgetPasswordComponent =  require('./components/auth/ForgetPasswordComponent.vue').default;
 let homeComponent = require('./components/HomeComponent.vue').default;
 let logoutComponent = require('./components/auth/LogoutComponent.vue').default;
+//Employees Routes
+let CreateEmployeeComponent = require('./components/employees/CreateComponent.vue').default;
+let IndexEmployeeComponent = require('./components/employees/IndexComponent.vue').default;
 
 
 
@@ -35,6 +38,18 @@ export const routes = [
         path:'/dashboard',
         name : 'dashboard',
         component:dashboardComponent,
+        // children: [
+        //     {
+        //       path: '/create-employee',
+        //       name : 'create-employee',
+        //       component: CreateEmployeeComponent,
+        //     },
+        //     {
+        //       path: '/index-employees',
+        //       name : 'index-employees',
+        //       component: IndexEmployeeComponent,
+        //     },
+        // ]
         // meta: {
         //     middleware: [auth],
         //   },
@@ -44,4 +59,20 @@ export const routes = [
         name : 'logout',
         component:logoutComponent
     },
+    {
+        path:'/dashboard/create-employee',
+        name : 'create-employee',
+        component: CreateEmployeeComponent
+    },
+    {
+        path:'/dashborard/index-employees',
+        name : 'index-employees',
+        component: IndexEmployeeComponent
+    },
+    // {
+    //     path: '/:catchAll(.*)*',
+    //     name: "PageNotFound",
+    //     component: PageNotFound,
+    //   },
+
 ]

@@ -19,9 +19,9 @@
 <body id="page-top">
     <div id="app">
         <div id="wrapper">
-
             <!-- ***************** Sidebar ******************** -->
-            <nav id="sidebar" v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/login'
+            <nav id="sidebar"
+                v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/login'
             || $route.path === '/forget' ? false : true ">
                 <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
                     <router-link to="/" class="sidebar-brand d-flex align-items-center justify-content-center">
@@ -32,7 +32,7 @@
                     </router-link>
                     <hr class="sidebar-divider my-0">
                     <li class="nav-item active">
-                        <router-link to="/login" class="nav-link">
+                        <router-link to="/dashboard" class="nav-link">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </router-link>
@@ -43,41 +43,32 @@
                     </div>
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse"
-                            data-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
+                            data-target="#collapseBootstrap1" aria-expanded="true" aria-controls="collapseBootstrap">
                             <i class="far fa-fw fa-window-maximize"></i>
-                            <span>Bootstrap UI</span>
+                            <span>Employees</span>
                         </a>
-                        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap"
+                        <div id="collapseBootstrap1" class="collapse" aria-labelledby="headingBootstrap"
                             data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Bootstrap UI</h6>
-                                <a class="collapse-item" href="alerts.html">Alerts</a>
-                                <a class="collapse-item" href="buttons.html">Buttons</a>
-                                <a class="collapse-item" href="dropdowns.html">Dropdowns</a>
-                                <a class="collapse-item" href="modals.html">Modals</a>
-                                <a class="collapse-item" href="popovers.html">Popovers</a>
-                                <a class="collapse-item" href="progress-bar.html">Progress Bars</a>
+                                <h6 class="collapse-header">Employees Control</h6>
+                                <router-link to="/dashboard/create-employee" class="collapse-item">Add Employees</router-link>
+                                <router-link to="/index-employees" class="collapse-item">All Employees</router-link>
                             </div>
                         </div>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="forms.html">
-                            <i class="fab fa-fw fa-wpforms"></i>
-                            <span>Forms</span>
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable"
                             aria-expanded="true" aria-controls="collapseTable">
                             <i class="fas fa-fw fa-table"></i>
-                            <span>Tables</span>
+                            <span>Suppliers</span>
                         </a>
                         <div id="collapseTable" class="collapse" aria-labelledby="headingTable"
                             data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Tables</h6>
-                                <a class="collapse-item" href="simple-tables.html">Simple Tables</a>
-                                <a class="collapse-item" href="datatables.html">DataTables</a>
+                                <h6 class="collapse-header">Supliers Control</h6>
+                                <router-link to="" class="collapse-item">Add Suppliers</router-link>
+                                <router-link to="" class="collapse-item">All Suppliers</router-link>
                             </div>
                         </div>
                     </li>
@@ -114,6 +105,12 @@
                             <span>Charts</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <router-link to="/logout" class="nav-link" href="forms.html">
+                            <i class="fab fa-fw fa-wpforms"></i>
+                            <span>Logout</span>
+                        </router-link>
+                    </li>
                     <hr class="sidebar-divider">
                     <div class="version" id="version-ruangadmin"></div>
                 </ul>
@@ -124,8 +121,10 @@
                 <div id="content">
 
                     <!-- ************************** Topbar ************************* -->
-                    <nav id="topbar"  v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/login'
-                    || $route.path === '/forget' ? false : true " class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
+                    <nav id="topbar"
+                        v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/login'
+                    || $route.path === '/forget' ? false : true "
+                        class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
                         <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
                             <i class="fa fa-bars"></i>
                         </button>
@@ -359,8 +358,8 @@
     </a>
 
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('backend/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    {{-- <script src="{{ asset('backend/vendor/jquery/jquery.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script> --}}
     <script src="{{ asset('backend/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('backend/js/ruang-admin.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/chart.js/Chart.min.js') }}"></script>
