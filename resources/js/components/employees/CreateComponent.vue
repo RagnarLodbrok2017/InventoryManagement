@@ -14,7 +14,7 @@
                         </router-link>
                     </div>
                     <div class="card-body">
-                        <form @submit.prevent="createEmployee">
+                        <form @submit.prevent="storeEmployee">
                             <div class="form-group">
                                 <div class="form-row">
                                     <div class="col-6">
@@ -146,16 +146,13 @@ export default {
         };
     },
     methods:{
-        createEmployee($request)
+        storeEmployee()
         {
             axios
-                .post("/employee/store-employee", this.form)
+                .post("../api/dashboard/employee", this.form)
                 .then((res) => {
                     console.log(res.data);
-                    Toast.fire({
-                        icon: "success",
-                        title: "Employee Created Successfully",
-                    });
+                    Notification.success();
                 })
                 .catch();
         },
@@ -167,10 +164,11 @@ export default {
                 Notification.Image_validation();
             }
             else{
-                console.log(event.target.files[0].size);
+                // console.log(event.target.files[0].size);
                 let render = new FileReader();
                 render.onload = event => {
                     this.form.photo = event.target.result;
+                    console.log("target.result" + this.form.photo);
                 };
                 render.readAsDataURL(file);
             }

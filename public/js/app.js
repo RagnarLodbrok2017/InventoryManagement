@@ -2128,13 +2128,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    createEmployee: function createEmployee($request) {
-      axios.post("/employee/store-employee", this.form).then(function (res) {
+    storeEmployee: function storeEmployee() {
+      axios.post("../api/dashboard/employee", this.form).then(function (res) {
         console.log(res.data);
-        Toast.fire({
-          icon: "success",
-          title: "Employee Created Successfully"
-        });
+        Notification.success();
       })["catch"]();
     },
     onFileSelected: function onFileSelected(event) {
@@ -2143,10 +2140,11 @@ __webpack_require__.r(__webpack_exports__);
       if (file.size > 200473) {
         Notification.Image_validation();
       } else {
-        console.log(event.target.files[0].size);
+        // console.log(event.target.files[0].size);
         var render = new FileReader();
         render.onload = function (event) {
           _this.form.photo = event.target.result;
+          console.log("target.result" + _this.form.photo);
         };
         render.readAsDataURL(file);
       }
@@ -3733,7 +3731,7 @@ var render = function render() {
     on: {
       submit: function submit($event) {
         $event.preventDefault();
-        return _vm.createEmployee.apply(null, arguments);
+        return _vm.storeEmployee.apply(null, arguments);
       }
     }
   }, [_c("div", {
