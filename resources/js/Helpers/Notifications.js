@@ -22,10 +22,10 @@ class Notification {
     error()
     {
         new Noty({
-            type: 'alert',
+            type: 'warning',
             layout: 'topRight',
             text: 'Something went wrong?!',
-            timeout:1000,
+            timeout:1500,
         }).show();
     };
     warning()

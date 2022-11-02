@@ -17,7 +17,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $employees = Employee::all();
-        return response()->json[$employees];
+        return response()->json($employees);
     }
 
     /**
@@ -59,7 +59,7 @@ class EmployeeController extends Controller
             $ext = explode('/', $sub)[1];
             $name = time().'.'.$ext;
             $img = Image::make($request->photo)->resize(240, 200);
-            $upload_path = "backend/employee";
+            $upload_path = '/backend/employee/';
             $Image_url = $upload_path.$name;
             $img->save($Image_url);
             $employee->photo = $Image_url;

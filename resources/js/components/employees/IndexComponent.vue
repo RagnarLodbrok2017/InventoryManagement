@@ -14,7 +14,40 @@
                         </router-link>
                     </div>
                     <div class="card-body">
-                        
+                        <div class="card">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                              <h6 class="m-0 font-weight-bold text-primary">Employees Table</h6>
+                            </div>
+                            <div class="table-responsive">
+                              <table class="table align-items-center table-flush">
+                                <thead class="thead-light">
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Photo</th>
+                                    <th>Phone</th>
+                                    <th>Salary</th>
+                                    <th>Joining Date</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr v-for="employee in employees" :key="employee.id">
+                                    <td>{{ employee.name }}</td>
+                                    <td><img :src="employee.photo" id="em_photo"></td>
+                                    <td>{{ employee.phone}}</td>
+                                    <td>{{ employee.salary}}</td>
+                                    <td>{{ employee.joining_date }}</td>
+                                    <td>
+                                        <button class="btn btn-success">Profile</button>
+                                        <button class="btn btn-primary">Edit</button>
+                                        <button class="btn btn-danger">Delete</button>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                            <div class="card-footer"></div>
+                          </div>
                     </div>
                 </div>
             </div>
@@ -28,40 +61,31 @@ export default {
         if (!User.loggedIn()) {
             this.$router.push("/login");
         }
+        this.allEmployees();
     },
     data() {
         return {
-            form: {
-                name: null,
-                email: null,
-                address: null,
-                salary: null,
-                joining_date: null,
-                nid: null,
-                phone: null,
-                photo:null,
-            },
+            employees: [],
             errors:{},
         };
     },
-    methood() {
-        createEmployee($request);
+    methods:{
+        allEmployees()
         {
-            axios
-                .post("/employee/store-employee", this.form)
-                .then((res) => {
-                    console.log(res.data);
-                    Toast.fire({
-                        icon: "success",
-                        title: "Employee Created Successfully",
-                    });
+            axios.get("../api/dashboard/employee/")
+            .then((response) =>{
+                 this.employees = response.data;
                 })
-                .catch();
+            .catch()
         }
     },
 };
 </script>
 
 <style type="text/css">
-
+#em_photo
+{
+    width:40px;
+    height: 40px;
+}
 </style>

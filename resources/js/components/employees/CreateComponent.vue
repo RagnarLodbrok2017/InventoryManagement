@@ -64,7 +64,7 @@
                                         <input type="date" class="form-control" placeholder="Enter Joining Date: "
                                             v-model="form.joining_date" />
                                         <small v-if="errors.joining_date" class="text-danger">
-                                            {{ errors.joining_dates[0] }}
+                                            {{ errors.joining_date[0] }}
                                         </small>
                                     </div>
 
@@ -153,8 +153,12 @@ export default {
                 .then((res) => {
                     console.log(res.data);
                     Notification.success();
+                    this.$router.push("/dashboard/index-employee");
                 })
-                .catch();
+                .catch(error => {
+                    this.errors = error.response.data.errors;
+                    Notification.error();
+                });
         },
         onFileSelected(event)
         {
