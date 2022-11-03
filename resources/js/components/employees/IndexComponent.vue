@@ -37,7 +37,7 @@
                                     <tbody>
                                         <tr v-for="employee in filtersearch" :key="employee.id">
                                             <td>{{ employee.name }}</td>
-                                            <td><img :src="employee.photo" id="em_photo"></td>
+                                            <td><img :src="'/'+employee.photo" id="em_photo"></td>
                                             <td>{{ employee.phone }}</td>
                                             <td>{{ employee.salary }}</td>
                                             <td>{{ employee.joining_date }}</td>

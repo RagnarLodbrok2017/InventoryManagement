@@ -4126,7 +4126,7 @@ var render = function render() {
       key: employee.id
     }, [_c("td", [_vm._v(_vm._s(employee.name))]), _vm._v(" "), _c("td", [_c("img", {
       attrs: {
-        src: employee.photo,
+        src: "/" + employee.photo,
         id: "em_photo"
       }
     })]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.phone))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.salary))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.joining_date))]), _vm._v(" "), _c("td", [_c("button", {
