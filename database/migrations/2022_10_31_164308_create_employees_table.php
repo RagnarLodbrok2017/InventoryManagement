@@ -20,9 +20,9 @@ class CreateEmployeesTable extends Migration
             $table->string('address');
             $table->string('salary');
             $table->date('joining_date');
-            $table->string('nid')->nullable();
+            $table->string('nid')->nullable(true);
             $table->string('phone');
-            $table->string('photo')->nullable();
+            $table->string('photo')->nullable(true);
             $table->timestamps();
         });
     }

@@ -2178,7 +2178,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       employees: [],
-      errors: {}
+      errors: {},
+      searchTerm: ''
     };
   },
   methods: {
@@ -2186,7 +2187,40 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
       axios.get("../api/dashboard/employee/").then(function (response) {
         _this.employees = response.data;
-      })["catch"]();
+      })["catch"](function (eroor) {
+        Notification.error();
+      });
+    },
+    deleteEmployee: function deleteEmployee(id) {
+      var _this2 = this;
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          axios["delete"]('../api/dashboard/employee/' + id).then(function () {
+            _this2.employees = _this2.employees.filter(function (employee) {
+              return employee.id != id;
+            });
+          })["catch"](function () {
+            _this2.$router.push('/dashboard/index-employee');
+          });
+          Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+        }
+      });
+    }
+  },
+  computed: {
+    filtersearch: function filtersearch() {
+      var _this3 = this;
+      return this.employees.filter(function (employee) {
+        return employee.name.toLowerCase().includes(_this3.searchTerm.toLowerCase());
+      });
     }
   }
 });
@@ -4056,11 +4090,38 @@ var render = function render() {
     staticClass: "card-body"
   }, [_c("div", {
     staticClass: "card"
-  }, [_vm._m(0), _vm._v(" "), _c("div", {
+  }, [_c("div", {
+    staticClass: "card-header py-3 d-flex flex-row align-items-center justify-content-between"
+  }, [_c("h6", {
+    staticClass: "m-0 font-weight-bold text-primary"
+  }, [_vm._v("Employees Table")]), _vm._v(" "), _c("div", {
+    staticClass: "col-4"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.searchTerm,
+      expression: "searchTerm"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Search Here"
+    },
+    domProps: {
+      value: _vm.searchTerm
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.searchTerm = $event.target.value;
+      }
+    }
+  })])]), _vm._v(" "), _c("div", {
     staticClass: "table-responsive"
   }, [_c("table", {
     staticClass: "table align-items-center table-flush"
-  }, [_vm._m(1), _vm._v(" "), _c("tbody", _vm._l(_vm.employees, function (employee) {
+  }, [_vm._m(0), _vm._v(" "), _c("tbody", _vm._l(_vm.filtersearch, function (employee) {
     return _c("tr", {
       key: employee.id
     }, [_c("td", [_vm._v(_vm._s(employee.name))]), _vm._v(" "), _c("td", [_c("img", {
@@ -4068,7 +4129,18 @@ var render = function render() {
         src: employee.photo,
         id: "em_photo"
       }
-    })]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.phone))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.salary))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.joining_date))]), _vm._v(" "), _vm._m(2, true)]);
+    })]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.phone))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.salary))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.joining_date))]), _vm._v(" "), _c("td", [_c("button", {
+      staticClass: "btn btn-success"
+    }, [_vm._v("Profile")]), _vm._v(" "), _c("button", {
+      staticClass: "btn btn-primary"
+    }, [_vm._v("Edit")]), _vm._v(" "), _c("button", {
+      staticClass: "btn btn-danger",
+      on: {
+        click: function click($event) {
+          return _vm.deleteEmployee(employee.id);
+        }
+      }
+    }, [_vm._v("Delete")])])]);
   }), 0)])]), _vm._v(" "), _c("div", {
     staticClass: "card-footer"
   })])])])])])]);
@@ -4076,27 +4148,9 @@ var render = function render() {
 var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "card-header py-3 d-flex flex-row align-items-center justify-content-between"
-  }, [_c("h6", {
-    staticClass: "m-0 font-weight-bold text-primary"
-  }, [_vm._v("Employees Table")])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
   return _c("thead", {
     staticClass: "thead-light"
   }, [_c("tr", [_c("th", [_vm._v("Name")]), _vm._v(" "), _c("th", [_vm._v("Photo")]), _vm._v(" "), _c("th", [_vm._v("Phone")]), _vm._v(" "), _c("th", [_vm._v("Salary")]), _vm._v(" "), _c("th", [_vm._v("Joining Date")]), _vm._v(" "), _c("th", [_vm._v("Action")])])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("td", [_c("button", {
-    staticClass: "btn btn-success"
-  }, [_vm._v("Profile")]), _vm._v(" "), _c("button", {
-    staticClass: "btn btn-primary"
-  }, [_vm._v("Edit")]), _vm._v(" "), _c("button", {
-    staticClass: "btn btn-danger"
-  }, [_vm._v("Delete")])]);
 }];
 render._withStripped = true;
 
@@ -8481,7 +8535,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#em_photo\n{\n    width:40px;\n    height: 40px;\n}\n", ""]);
+exports.push([module.i, "\n#em_photo {\n    width: 40px;\n    height: 40px;\n}\n", ""]);
 
 // exports
 
