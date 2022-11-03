@@ -2179,7 +2179,18 @@ __webpack_require__.r(__webpack_exports__);
     return {
       employees: [],
       errors: {},
-      searchTerm: ''
+      searchTerm: '',
+      editForm: {
+        name: null,
+        email: null,
+        address: null,
+        salary: null,
+        joining_date: null,
+        nid: null,
+        phone: null,
+        photo: null
+      },
+      editFormErrors: {}
     };
   },
   methods: {
@@ -2213,13 +2224,49 @@ __webpack_require__.r(__webpack_exports__);
           Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
         }
       });
+    },
+    editEmployee: function editEmployee(employee) {
+      this.editFormErrors = {};
+      this.editForm.id = employee.id;
+      this.editForm.name = employee.name;
+      this.editForm.email = employee.email;
+      this.editForm.address = employee.address;
+      this.editForm.salary = employee.salary;
+      this.editForm.joining_date = employee.joining_date;
+      this.editForm.nid = employee.nid;
+      this.editForm.phone = employee.phone;
+      this.editForm.photo = employee.photo;
+    },
+    updateEmployee: function updateEmployee(employee) {
+      var _this3 = this;
+      axios.put('../api/dashboard/employee/' + this.editForm.id, employee).then(function (response) {
+        Notification.success();
+        _this3.allEmployees();
+        console.log(response.data);
+      })["catch"](function (error) {
+        _this3.editFormErrors = error.response.data.errors;
+      });
+    },
+    onFileSelected: function onFileSelected(event) {
+      var _this4 = this;
+      var file = event.target.files[0];
+      if (file.size > 200473) {
+        Notification.Image_validation();
+      } else {
+        // console.log(event.target.files[0].size);
+        var render = new FileReader();
+        render.onload = function (event) {
+          _this4.editForm.photo = event.target.result;
+        };
+        render.readAsDataURL(file);
+      }
     }
   },
   computed: {
     filtersearch: function filtersearch() {
-      var _this3 = this;
+      var _this5 = this;
       return this.employees.filter(function (employee) {
-        return employee.name.toLowerCase().includes(_this3.searchTerm.toLowerCase());
+        return employee.name.toLowerCase().includes(_this5.searchTerm.toLowerCase());
       });
     }
   }
@@ -4132,7 +4179,16 @@ var render = function render() {
     })]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.phone))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.salary))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(employee.joining_date))]), _vm._v(" "), _c("td", [_c("button", {
       staticClass: "btn btn-success"
     }, [_vm._v("Profile")]), _vm._v(" "), _c("button", {
-      staticClass: "btn btn-primary"
+      staticClass: "btn btn-primary",
+      attrs: {
+        "data-toggle": "modal",
+        "data-target": ".editEmployee-lg"
+      },
+      on: {
+        click: function click($event) {
+          return _vm.editEmployee(employee);
+        }
+      }
     }, [_vm._v("Edit")]), _vm._v(" "), _c("button", {
       staticClass: "btn btn-danger",
       on: {
@@ -4141,7 +4197,303 @@ var render = function render() {
         }
       }
     }, [_vm._v("Delete")])])]);
-  }), 0)])]), _vm._v(" "), _c("div", {
+  }), 0), _vm._v(" "), _c("div", {
+    staticClass: "modal fade editEmployee-lg",
+    attrs: {
+      tabindex: "-1",
+      role: "dialog",
+      "aria-labelledby": "myLargeModalLabel",
+      "aria-hidden": "true"
+    }
+  }, [_c("div", {
+    staticClass: "modal-dialog modal-lg"
+  }, [_c("div", {
+    staticClass: "modal-content"
+  }, [_vm._m(1), _vm._v(" "), _c("div", {
+    staticClass: "modal-body"
+  }, [_c("div", {
+    staticClass: "card-body"
+  }, [_c("form", {
+    on: {
+      submit: function submit($event) {
+        $event.preventDefault();
+        return _vm.updateEmployee.apply(null, arguments);
+      }
+    }
+  }, [_c("div", {
+    staticClass: "form-group"
+  }, [_c("div", {
+    staticClass: "form-row"
+  }, [_c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "name"
+    }
+  }, [_vm._v("Name:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.name,
+      expression: "editForm.name"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Enter Employee Name"
+    },
+    domProps: {
+      value: _vm.editForm.name
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.editForm, "name", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.editFormErrors.name ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.name[0]) + "\n                                                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "email"
+    }
+  }, [_vm._v("Address:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.email,
+      expression: "editForm.email"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "email",
+      placeholder: "Enter Employee Email Address"
+    },
+    domProps: {
+      value: _vm.editForm.email
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.editForm, "email", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.editFormErrors.email ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.email[0]) + "\n                                                                ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("div", {
+    staticClass: "form-row"
+  }, [_c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "address"
+    }
+  }, [_vm._v("Address:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.address,
+      expression: "editForm.address"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Enter Employee Address"
+    },
+    domProps: {
+      value: _vm.editForm.address
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.editForm, "address", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.editFormErrors.address ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.address[0]) + "\n                                                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "salary"
+    }
+  }, [_vm._v("Salary:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.salary,
+      expression: "editForm.salary"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "number",
+      placeholder: "Enter Employee Salary"
+    },
+    domProps: {
+      value: _vm.editForm.salary
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.editForm, "salary", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.editFormErrors.salary ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.salary[0]) + "\n                                                                ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("div", {
+    staticClass: "form-row"
+  }, [_c("div", {
+    staticClass: "col-4"
+  }, [_c("label", {
+    attrs: {
+      "for": "Joining Date"
+    }
+  }, [_vm._v("Joining\n                                                                    Date:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.joining_date,
+      expression: "editForm.joining_date"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "date",
+      placeholder: "Enter Joining Date: "
+    },
+    domProps: {
+      value: _vm.editForm.joining_date
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.editForm, "joining_date", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.editFormErrors.joining_date ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.joining_date[0]) + "\n                                                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-4"
+  }, [_c("label", {
+    attrs: {
+      "for": "text"
+    }
+  }, [_vm._v("Nid:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.nid,
+      expression: "editForm.nid"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Enter Your Nid"
+    },
+    domProps: {
+      value: _vm.editForm.nid
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.editForm, "nid", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.editFormErrors.nid ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.nid[0]) + "\n                                                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-4"
+  }, [_c("label", {
+    attrs: {
+      "for": "Phone"
+    }
+  }, [_vm._v("Phone:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.phone,
+      expression: "editForm.phone"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Enter Phone Number: "
+    },
+    domProps: {
+      value: _vm.editForm.phone
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.editForm, "phone", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.editFormErrors.phone ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.phone[0]) + "\n                                                                ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("div", {
+    staticClass: "form-row"
+  }, [_c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "Photo"
+    }
+  }, [_vm._v("Upload Photo\n                                                                    :")]), _vm._v(" "), _c("div", {
+    staticClass: "custom-file"
+  }, [_c("input", {
+    staticClass: "custom-file-input",
+    attrs: {
+      type: "file",
+      id: "customFile"
+    },
+    on: {
+      change: _vm.onFileSelected
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "custom-file-label",
+    attrs: {
+      "for": "customFile"
+    }
+  }, [_vm._v("Choose file")])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-3"
+  }, [_c("img", {
+    staticStyle: {
+      height: "100px",
+      width: "120px"
+    },
+    attrs: {
+      src: _vm.editForm.photo
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "col-3"
+  }, [_vm.editFormErrors.photo ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.photo[0]) + "\n                                                                ")]) : _vm._e()])])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "modal-footer"
+  }, [_c("button", {
+    staticClass: "btn btn-secondary",
+    attrs: {
+      type: "button",
+      "data-dismiss": "modal"
+    }
+  }, [_vm._v("Close")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      type: "submit"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.updateEmployee(_vm.editForm);
+      }
+    }
+  }, [_vm._v("Save Changes")])])])])])])]), _vm._v(" "), _c("div", {
     staticClass: "card-footer"
   })])])])])])]);
 };
@@ -4151,6 +4503,24 @@ var staticRenderFns = [function () {
   return _c("thead", {
     staticClass: "thead-light"
   }, [_c("tr", [_c("th", [_vm._v("Name")]), _vm._v(" "), _c("th", [_vm._v("Photo")]), _vm._v(" "), _c("th", [_vm._v("Phone")]), _vm._v(" "), _c("th", [_vm._v("Salary")]), _vm._v(" "), _c("th", [_vm._v("Joining Date")]), _vm._v(" "), _c("th", [_vm._v("Action")])])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "modal-header"
+  }, [_c("h5", {
+    staticClass: "modal-title",
+    attrs: {
+      id: "exampleModalCenterTitle"
+    }
+  }, [_vm._v("\n                                                Edit Employee")]), _vm._v(" "), _c("button", {
+    staticClass: "close",
+    attrs: {
+      type: "button",
+      "data-dismiss": "modal",
+      "aria-label": "Close"
+    }
+  })]);
 }];
 render._withStripped = true;
 

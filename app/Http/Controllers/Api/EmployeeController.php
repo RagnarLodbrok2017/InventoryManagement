@@ -106,7 +106,44 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request ,[
+            'name' =>'required|max:255|min:3',
+            'email' => 'required | max:255| min:3 | email |  unique:employees,email,'. $request->get('id'),
+            'address'=> 'nullable|string|max:255',
+            'salary' => 'numeric|min:2',
+            'joining_date'=> 'date_format:Y-m-d',
+            'nid'=> 'nullable|sometimes',
+            'phone'=> 'required|min:5|max:13| unique:employees,phone,'.$request->get('id'),
+            'photo'=>'nullable',
+        ]);
+        $employee = Employee::find($id);
+        if($request->photo != $employee->photo)
+        {
+            if($employee->photo != NULL)
+            {
+                unlink($employee->photo);
+            }
+            $position = strpos($request->photo, ';');
+            $sub = substr($request->photo, 0, $position);
+            $ext = explode('/', $sub)[1];
+            $name = time().'.'.$ext;
+            $img = Image::make($request->photo)->resize(240, 200);
+            $upload_path = 'backend/employee/';
+            $Image_url = $upload_path.$name;
+            $img->save($Image_url);
+            $employee->photo = $Image_url;
+            $employee->name = $request->name;
+            $employee->email = $request->email;
+            $employee->address = $request->address;
+            $employee->salary = $request->salary;
+            $employee->joining_date = $request->joining_date;
+            $employee->nid = $request->nid;
+            $employee->phone = $request->phone;
+            $employee->save();
+        }
+        else{
+            $employee->update($request->all());
+        }
     }
 
     /**
