@@ -103,7 +103,40 @@ class SupplierController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'name'=> 'required|min:3|max:255',
+            'email'=> 'required|max:255|email|unique:suppliers,email,'.$request->get('id'),
+            'phone'=> 'required|min:3|max:255|unique:suppliers,phone,'.$request->get('id'),
+            'address'=> 'nullable|min:3|max:255',
+            'shopname'=>'nullable|min:3|max:255',
+            'photo'=>'nullable',
+        ]);
+        $supplier = Supplier::find($id);
+        if($request->photo != $supplier->photo)
+        {
+            if($supplier->photo != NULL)
+            {
+                unlink($supplier->photo);
+            }
+            $position = strpos($request->photo, ';');
+            $sub = substr($request->photo, 0, $position);
+            $ext = explode('/', $sub)[1];
+            $name = time().'.'.$ext;
+            $img = Image::make($request->photo)->resize(240, 200);
+            $upload_path = 'backend/supplier/';
+            $Image_url = $upload_path.$name;
+            $img->save($Image_url);
+            $supplier->photo = $Image_url;
+            $supplier->name = $request->name;
+            $supplier->email = $request->email;
+            $supplier->address = $request->address;
+            $supplier->shopname = $request->shopname;
+            $supplier->phone = $request->phone;
+            $supplier->save();
+        }
+        else{
+            $supplier->update($request->all());
+        }
     }
 
     /**
@@ -114,6 +147,11 @@ class SupplierController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $supplier = Supplier::find($id);
+        if($supplier && $supplier->photo)
+        {
+            unlink($supplier->photo);
+        }
+        $supplier->delete();
     }
 }
