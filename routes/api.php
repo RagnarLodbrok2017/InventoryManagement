@@ -29,6 +29,7 @@ Route::group([
 });
 
 Route::apiResource('/dashboard/employee', 'Api\EmployeeController');
+Route::apiResource('/dashboard/supplier', 'Api\SupplierController');
 
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('home', 'AuthController@home');

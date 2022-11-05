@@ -16,4 +16,6 @@ class Employee extends Model
         'phone',
         'photo',
     ];
+
+    protected $table = 'employees';
 }

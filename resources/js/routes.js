@@ -8,6 +8,10 @@ let logoutComponent = require('./components/auth/LogoutComponent.vue').default;
 let CreateEmployeeComponent = require('./components/employees/CreateComponent.vue').default;
 let IndexEmployeeComponent = require('./components/employees/IndexComponent.vue').default;
 
+//Suppliers Routes
+let CraeteSupplierComponent = require('./components/suppliers/CreateComponent.vue').default;
+let IndexSupplierComponent = require('./components/suppliers/IndexComponent.vue').default;
+
 
 
 
@@ -74,5 +78,15 @@ export const routes = [
     //     name: "PageNotFound",
     //     component: PageNotFound,
     //   },
+    {
+        path:'/dashboard/create-supplier',
+        name : 'create-supplier',
+        component: CraeteSupplierComponent,
+    },
+    {
+        path:'/dashboard/index-supplier',
+        name : 'index-supplier',
+        component: IndexSupplierComponent,
+    }
 
 ]

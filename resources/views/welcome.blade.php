@@ -67,8 +67,8 @@
                             data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Supliers Control</h6>
-                                <router-link to="" class="collapse-item">Add Suppliers</router-link>
-                                <router-link to="" class="collapse-item">All Suppliers</router-link>
+                                <router-link to="/dashboard/create-supplier" class="collapse-item">Add Suppliers</router-link>
+                                <router-link to="/dashboard/index-supplier" class="collapse-item">All Suppliers</router-link>
                             </div>
                         </div>
                     </li>
