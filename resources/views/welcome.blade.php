@@ -73,9 +73,11 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="ui-colors.html">
+                        <a class="nav-link">
                             <i class="fas fa-fw fa-palette"></i>
-                            <span>UI Colors</span>
+                            <span>
+                                <router-link to="/dashboard/index-category">Categories</router-link>
+                            </span>
                         </a>
                     </li>
                     <hr class="sidebar-divider">

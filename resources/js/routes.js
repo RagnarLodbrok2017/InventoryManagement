@@ -12,6 +12,9 @@ let IndexEmployeeComponent = require('./components/employees/IndexComponent.vue'
 let CraeteSupplierComponent = require('./components/suppliers/CreateComponent.vue').default;
 let IndexSupplierComponent = require('./components/suppliers/IndexComponent.vue').default;
 
+//Categories Routes
+let IndexCategoryComponent = require('./components/categories/indexComponent.vue').default
+
 
 
 
@@ -87,6 +90,11 @@ export const routes = [
         path:'/dashboard/index-supplier',
         name : 'index-supplier',
         component: IndexSupplierComponent,
+    },
+    {
+        path:'/dashboard/index-category',
+        name: 'index-category',
+        component:IndexCategoryComponent
     }
 
 ]
