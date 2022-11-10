@@ -13,7 +13,10 @@ let CraeteSupplierComponent = require('./components/suppliers/CreateComponent.vu
 let IndexSupplierComponent = require('./components/suppliers/IndexComponent.vue').default;
 
 //Categories Routes
-let IndexCategoryComponent = require('./components/categories/indexComponent.vue').default
+let IndexCategoryComponent = require('./components/categories/indexComponent.vue').default;
+
+//Products Routes
+let IndexProductComponent = require('./components/products/indexComponent.vue').default;
 
 
 
@@ -95,6 +98,11 @@ export const routes = [
         path:'/dashboard/index-category',
         name: 'index-category',
         component:IndexCategoryComponent
+    },
+    {
+        path:'/dashboard/index-product',
+        name: 'index-product',
+        component:IndexProductComponent
     }
 
 ]

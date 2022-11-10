@@ -11,4 +11,9 @@ class Supplier extends Model
     ];
 
     protected $table = 'suppliers';
+
+    public function product()
+    {
+        return $this->hasMany('App\Model\Product');
+    }
 }
