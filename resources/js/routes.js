@@ -18,6 +18,10 @@ let IndexCategoryComponent = require('./components/categories/indexComponent.vue
 //Products Routes
 let IndexProductComponent = require('./components/products/indexComponent.vue').default;
 
+//Expenses Routes
+let IndexExpenseComponent = require('./components/expenses/indexComponent.vue').default;
+
+
 
 
 
@@ -103,6 +107,11 @@ export const routes = [
         path:'/dashboard/index-product',
         name: 'index-product',
         component:IndexProductComponent
-    }
+    },
+    {
+        path:'/dashboard/index-expense',
+        name: 'index-expense',
+        component:IndexExpenseComponent
+    },
 
 ]

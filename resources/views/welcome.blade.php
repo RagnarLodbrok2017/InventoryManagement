@@ -88,6 +88,14 @@
                             </span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link">
+                            <i class="fas fa-fw fa-palette"></i>
+                            <span>
+                                <router-link to="/dashboard/index-expense">Expenses</router-link>
+                            </span>
+                        </a>
+                    </li>
                     <hr class="sidebar-divider">
                     <div class="sidebar-heading">
                         Examples
