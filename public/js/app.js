@@ -2511,7 +2511,7 @@ __webpack_require__.r(__webpack_exports__);
     onFileSelected: function onFileSelected(event) {
       var _this6 = this;
       var file = event.target.files[0];
-      if (file.size > 200473) {
+      if (file.size > 300473) {
         Notification.Image_validation();
       } else {
         var render = new FileReader();
@@ -5742,7 +5742,17 @@ var render = function render() {
   }, [_vm._m(2), _vm._v(" "), _c("tbody", _vm._l(_vm.filterSearchProducts, function (product) {
     return _c("tr", {
       key: product.id
-    }, [_c("td", [_vm._v(_vm._s(product.id))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.code))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.selling_price))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.category.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.supplier.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.quantity))]), _vm._v(" "), _c("td", [_c("button", {
+    }, [_c("td", {
+      staticClass: "font-weight-bold"
+    }, [_vm._v(_vm._s(product.name))]), _vm._v(" "), _c("td", [_c("img", {
+      staticStyle: {
+        width: "40px",
+        height: "40px"
+      },
+      attrs: {
+        src: "/" + product.photo
+      }
+    })]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.code))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.selling_price))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.category.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.supplier.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(product.quantity))]), _vm._v(" "), _c("td", [_c("button", {
       staticClass: "btn btn-success"
     }, [_vm._v("Profile")]), _vm._v(" "), _c("button", {
       staticClass: "btn btn-primary",
@@ -6159,7 +6169,7 @@ var staticRenderFns = [function () {
     _c = _vm._self._c;
   return _c("thead", {
     staticClass: "thead-light"
-  }, [_c("tr", [_c("th", [_vm._v("#")]), _vm._v(" "), _c("th", [_vm._v("Name")]), _vm._v(" "), _c("th", [_vm._v("Code")]), _vm._v(" "), _c("th", [_vm._v("Sell Price")]), _vm._v(" "), _c("th", [_vm._v("Category")]), _vm._v(" "), _c("th", [_vm._v("Supplier")]), _vm._v(" "), _c("th", [_vm._v("Quantity")]), _vm._v(" "), _c("th", [_vm._v("Action")])])]);
+  }, [_c("tr", [_c("th", [_vm._v("Name")]), _vm._v(" "), _c("th", [_vm._v("Image")]), _vm._v(" "), _c("th", [_vm._v("Code")]), _vm._v(" "), _c("th", [_vm._v("Sell Price")]), _vm._v(" "), _c("th", [_vm._v("Category")]), _vm._v(" "), _c("th", [_vm._v("Supplier")]), _vm._v(" "), _c("th", [_vm._v("Quantity")]), _vm._v(" "), _c("th", [_vm._v("Action")])])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;

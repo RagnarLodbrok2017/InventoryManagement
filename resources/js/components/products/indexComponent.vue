@@ -142,8 +142,8 @@
                                 <table class="table align-items-center table-flush">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>#</th>
                                             <th>Name</th>
+                                            <th>Image</th>
                                             <th>Code</th>
                                             <th>Sell Price</th>
                                             <th>Category</th>
@@ -154,8 +154,8 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="product in filterSearchProducts" :key="product.id">
-                                            <td>{{ product.id }}</td>
-                                            <td>{{ product.name }}</td>
+                                            <td class="font-weight-bold">{{ product.name }}</td>
+                                            <td> <img :src="'/'+product.photo" style="width:40px;height:40px"/></td>
                                             <td>{{ product.code }}</td>
                                             <td>{{ product.selling_price }}</td>
                                             <td>{{ product.category.name }}</td>
@@ -272,7 +272,7 @@
                                                                         {{ errors.photo[0] }}
                                                                     </small>
                                                                 </div>
-            
+
                                                             </div>
                                                         </form>
                                                     </div>
@@ -393,7 +393,7 @@ export default {
             this.editForm.category_id = product.category_id;
             this.editForm.photo = product.photo;
             this.errors = "";
-            
+
         },
         updateProduct(product)
         {
@@ -438,7 +438,7 @@ export default {
         onFileSelected(event)
         {
             let file = event.target.files[0];
-            if(file.size > 200473)
+            if(file.size > 300473)
             {
                 Notification.Image_validation();
             }
