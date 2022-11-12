@@ -2395,6 +2395,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       expenses: [],
       errors: {},
+      expense: {
+        details: null
+      },
       searchTerm: "",
       editForm: {
         details: null,
@@ -2426,6 +2429,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     updateExpense: function updateExpense(expense) {
       var _this2 = this;
+      this.checkExpense(this.editForm.details);
       axios.put("../api/dashboard/expense/" + this.editForm.id, expense).then(function (response) {
         Notification.success();
         _this2.fetchExpenses();
@@ -2465,13 +2469,23 @@ __webpack_require__.r(__webpack_exports__);
           Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
         }
       });
+    },
+    checkExpense: function checkExpense() {
+      var _this5 = this;
+      var check = this.expenses.find(function (expense) {
+        return expense.details.toLowerCase().includes(_this5.editForm.details.toLowerCase());
+      });
+      if (check) {
+        console.log(check);
+        Notification.exist();
+      }
     }
   },
   computed: {
     filterSearch: function filterSearch() {
-      var _this5 = this;
+      var _this6 = this;
       return this.expenses.filter(function (expense) {
-        return expense.details.toLowerCase().includes(_this5.searchTerm.toLowerCase());
+        return expense.details.toLowerCase().includes(_this6.searchTerm.toLowerCase());
       });
     }
   }
@@ -5650,6 +5664,9 @@ var render = function render() {
       value: _vm.editForm.details
     },
     on: {
+      change: function change($event) {
+        return _vm.checkExpense();
+      },
       input: function input($event) {
         if ($event.target.composing) return;
         _vm.$set(_vm.editForm, "details", $event.target.value);
@@ -65782,6 +65799,16 @@ var Notification = /*#__PURE__*/function () {
         type: 'error',
         layout: 'topRight',
         text: 'Uploaded image big than 2MB!',
+        timeout: 1500
+      }).show();
+    }
+  }, {
+    key: "exist",
+    value: function exist() {
+      new Noty({
+        type: 'warning',
+        layout: 'topRight',
+        text: 'This Item is exist',
         timeout: 1500
       }).show();
     }

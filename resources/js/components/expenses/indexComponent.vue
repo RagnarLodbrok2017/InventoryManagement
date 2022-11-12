@@ -123,7 +123,7 @@
                                                                             <div class="input-group-prepend">
                                                                               <span class="input-group-text">*Expense Details:</span>
                                                                             </div>
-                                                                            <textarea v-model="editForm.details" required class="form-control" aria-label="With textarea"></textarea>
+                                                                            <textarea @change="checkExpense()" v-model="editForm.details" required class="form-control" aria-label="With textarea"></textarea>
                                                                             <small class="text-danger" v-if="errors.details">
                                                                                 {{errors.details[0]}}
                                                                             </small>
@@ -198,6 +198,9 @@ export default {
         return {
             expenses:[],
             errors:{},
+            expense:{
+                details:null,
+            },
             searchTerm:"",
             editForm:{
                 details:null,
@@ -231,6 +234,7 @@ export default {
             this.errors = "";
         },
         updateExpense(expense){
+            this.checkExpense(this.editForm.details);
             axios.put("../api/dashboard/expense/"+this.editForm.id, expense)
             .then(response=>{
                 Notification.success();
@@ -278,8 +282,18 @@ export default {
                     )
                 }
             })
-        }
-
+        },
+        checkExpense()
+        {
+             let check = this.expenses.find((expense) => {
+                return expense.details.toLowerCase().includes(this.editForm.details.toLowerCase());
+            });
+            if (check)
+            {
+                console.log(check);
+                Notification.exist();
+            }
+        },
     },
     computed:{
         filterSearch()
@@ -287,8 +301,8 @@ export default {
             return this.expenses.filter(expense=>{
                 return expense.details.toLowerCase().includes(this.searchTerm.toLowerCase());
             });
-        },
-    }
+        },   
+    },
 }
 </script>
 <style type="text/css"></style>

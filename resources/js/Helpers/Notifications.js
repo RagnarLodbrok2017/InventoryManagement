@@ -45,7 +45,16 @@ class Notification {
             text: 'Uploaded image big than 2MB!',
             timeout:1500,
         }).show();
-    }
+    };
+    exist()
+    {
+        new Noty({
+            type: 'warning',
+            layout: 'topRight',
+            text: 'This Item is exist',
+            timeout:1500,
+        }).show();
+    };
 
 
 }
