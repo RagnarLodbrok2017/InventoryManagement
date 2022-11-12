@@ -33,7 +33,8 @@ Route::apiResource('/dashboard/supplier', 'Api\SupplierController');
 Route::apiResource('/dashboard/category', 'Api\CategoryController');
 Route::apiResource('/dashboard/product', 'Api\ProductController');
 Route::apiResource('/dashboard/expense', 'Api\ExpenseController');
-
+// Salary Routes
+Route::Post('/dashboard/salary/paid/{id}', 'Api\salaryController@Paid');
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('home', 'AuthController@home');
 //     });

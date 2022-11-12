@@ -18,4 +18,9 @@ class Employee extends Model
     ];
 
     protected $table = 'employees';
+
+    public function salary()
+    {
+        return $this->hasMany('App\Model\Salary');
+    }
 }

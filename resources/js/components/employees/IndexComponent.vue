@@ -43,129 +43,222 @@
                                             <td>{{ employee.joining_date }}</td>
                                             <td>
                                                 <button class="btn btn-success">Profile</button>
-                                                <button class="btn btn-primary" data-toggle="modal"
-                                                    data-target=".editEmployee-lg" @click="editEmployee(employee)">Edit</button>
-
+                                                <button class="btn btn-primary" data-toggle="modal" data-target=".editEmployee-lg"
+                                                    @click="editEmployee(employee)">Edit</button>
+                                                <button class="btn btn-warning" data-toggle="modal" data-target=".paySalary-lg"
+                                                    @click="paySalaryButton(employee)">Pay Salary</button>
+                                
                                                 <button @click="deleteEmployee(employee.id)" class="btn btn-danger">Delete</button>
                                             </td>
                                         </tr>
                                     </tbody>
                                     <!-- Edit Employee Form -->
-                                    <div class="modal fade editEmployee-lg" tabindex="-1" role="dialog"
-                                    aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalCenterTitle">
-                                                    Edit Employee</h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="card-body">
-                                                    <form @submit.prevent="updateEmployee">
-                                                        <div class="form-group">
-                                                            <div class="form-row">
-                                                                <div class="col-6">
-                                                                    <label for="name">Name:</label>
-                                                                    <input type="text" class="form-control" placeholder="Enter Employee Name" v-model="editForm.name" />
-                                                                    <small v-if="editFormErrors.name" class="text-danger">
-                                                                        {{ editFormErrors.name[0] }}
-                                                                    </small>
-                                                                </div>
-
-                                                                <div class="col-6">
-                                                                    <label for="email">Address:</label>
-                                                                    <input type="email" class="form-control" placeholder="Enter Employee Email Address"
-                                                                        v-model="editForm.email" />
-                                                                    <small v-if="editFormErrors.email" class="text-danger">
-                                                                        {{ editFormErrors.email[0] }}
-                                                                    </small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="form-row">
-                                                                <div class="col-6">
-                                                                    <label for="address">Address:</label>
-                                                                    <input type="text" class="form-control" placeholder="Enter Employee Address"
-                                                                        v-model="editForm.address" />
-                                                                    <small v-if="editFormErrors.address" class="text-danger">
-                                                                        {{ editFormErrors.address[0] }}
-                                                                    </small>
-                                                                </div>
-
-                                                                <div class="col-6">
-                                                                    <label for="salary">Salary:</label>
-                                                                    <input type="number" class="form-control" placeholder="Enter Employee Salary"
-                                                                        v-model="editForm.salary" />
-                                                                    <small v-if="editFormErrors.salary" class="text-danger">
-                                                                        {{ editFormErrors.salary[0] }}
-                                                                    </small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="form-row">
-                                                                <div class="col-4">
-                                                                    <label for="Joining Date">Joining
-                                                                        Date:</label>
-                                                                    <input type="date" class="form-control" placeholder="Enter Joining Date: "
-                                                                        v-model="editForm.joining_date" />
-                                                                    <small v-if="editFormErrors.joining_date" class="text-danger">
-                                                                        {{ editFormErrors.joining_date[0] }}
-                                                                    </small>
-                                                                </div>
-
-                                                                <div class="col-4">
-                                                                    <label for="text">Nid:</label>
-                                                                    <input type="text" class="form-control" placeholder="Enter Your Nid" v-model="editForm.nid" />
-                                                                    <small v-if="editFormErrors.nid" class="text-danger">
-                                                                        {{ editFormErrors.nid[0] }}
-                                                                    </small>
-                                                                </div>
-                                                                <div class="col-4">
-                                                                    <label for="Phone">Phone:</label>
-                                                                    <input type="text" class="form-control" placeholder="Enter Phone Number: " v-model="editForm.phone" />
-                                                                    <small v-if="editFormErrors.phone" class="text-danger">
-                                                                        {{ editFormErrors.phone[0] }}
-                                                                    </small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="form-row">
-                                                                <div class="col-6">
-                                                                    <label for="Photo">Upload Photo
-                                                                        :</label>
-                                                                    <div class="custom-file">
-                                                                        <input type="file" class="custom-file-input" id="customFile" @change="onFileSelected" />
-                                                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                    <div class="modal fade editEmployee-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                        Edit Employee</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="card-body">
+                                                        <form @submit.prevent="updateEmployee">
+                                                            <div class="form-group">
+                                                                <div class="form-row">
+                                                                    <div class="col-6">
+                                                                        <label for="name">Name:</label>
+                                                                        <input type="text" class="form-control" placeholder="Enter Employee Name"
+                                                                            v-model="editForm.name" />
+                                                                        <small v-if="editFormErrors.name" class="text-danger">
+                                                                            {{ editFormErrors.name[0] }}
+                                                                        </small>
+                                                                    </div>
+                                
+                                                                    <div class="col-6">
+                                                                        <label for="email">Address:</label>
+                                                                        <input type="email" class="form-control"
+                                                                            placeholder="Enter Employee Email Address" v-model="editForm.email" />
+                                                                        <small v-if="editFormErrors.email" class="text-danger">
+                                                                            {{ editFormErrors.email[0] }}
+                                                                        </small>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-3">
-                                                                    <img :src="editForm.photo" style="height: 100px; width: 120px" />
-                                                                </div>
-                                                                <div class="col-3">
-                                                                    <small v-if="editFormErrors.photo" class="text-danger">
-                                                                        {{ editFormErrors.photo[0] }}
-                                                                    </small>
-                                                                </div>
-
                                                             </div>
-                                                        </div>
-                                                    </form>
+                                                            <div class="form-group">
+                                                                <div class="form-row">
+                                                                    <div class="col-6">
+                                                                        <label for="address">Address:</label>
+                                                                        <input type="text" class="form-control" placeholder="Enter Employee Address"
+                                                                            v-model="editForm.address" />
+                                                                        <small v-if="editFormErrors.address" class="text-danger">
+                                                                            {{ editFormErrors.address[0] }}
+                                                                        </small>
+                                                                    </div>
+                                
+                                                                    <div class="col-6">
+                                                                        <label for="salary">Salary:</label>
+                                                                        <input type="number" class="form-control" placeholder="Enter Employee Salary"
+                                                                            v-model="editForm.salary" />
+                                                                        <small v-if="editFormErrors.salary" class="text-danger">
+                                                                            {{ editFormErrors.salary[0] }}
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="form-row">
+                                                                    <div class="col-4">
+                                                                        <label for="Joining Date">Joining
+                                                                            Date:</label>
+                                                                        <input type="date" class="form-control" placeholder="Enter Joining Date: "
+                                                                            v-model="editForm.joining_date" />
+                                                                        <small v-if="editFormErrors.joining_date" class="text-danger">
+                                                                            {{ editFormErrors.joining_date[0] }}
+                                                                        </small>
+                                                                    </div>
+                                
+                                                                    <div class="col-4">
+                                                                        <label for="text">Nid:</label>
+                                                                        <input type="text" class="form-control" placeholder="Enter Your Nid"
+                                                                            v-model="editForm.nid" />
+                                                                        <small v-if="editFormErrors.nid" class="text-danger">
+                                                                            {{ editFormErrors.nid[0] }}
+                                                                        </small>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <label for="Phone">Phone:</label>
+                                                                        <input type="text" class="form-control" placeholder="Enter Phone Number: "
+                                                                            v-model="editForm.phone" />
+                                                                        <small v-if="editFormErrors.phone" class="text-danger">
+                                                                            {{ editFormErrors.phone[0] }}
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="form-row">
+                                                                    <div class="col-6">
+                                                                        <label for="Photo">Upload Photo
+                                                                            :</label>
+                                                                        <div class="custom-file">
+                                                                            <input type="file" class="custom-file-input" id="customFile"
+                                                                                @change="onFileSelected" />
+                                                                            <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-3">
+                                                                        <img :src="editForm.photo" style="height: 100px; width: 120px" />
+                                                                    </div>
+                                                                    <div class="col-3">
+                                                                        <small v-if="editFormErrors.photo" class="text-danger">
+                                                                            {{ editFormErrors.photo[0] }}
+                                                                        </small>
+                                                                    </div>
+                                
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary" @click="updateEmployee(editForm)">Save Changes</button>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary" @click="updateEmployee(editForm)">Save
+                                                        Changes</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="modal fade paySalary-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                        Edit Employee</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="card-body">
+                                                        <form @submit.prevent="paySalaryMethod">
+                                                            <div class="form-group">
+                                                                <div class="form-row">
+                                                                    <div class="col-6">
+                                                                        <label for="name">Employee Name:</label>
+                                                                            <input class="form-control" type="text" v-model="payForm.name" readonly=""/>
+                                                                        <small v-if="payFormErrors.name" class="text-danger">
+                                                                            {{ payFormErrors.name[0] }}
+                                                                        </small>
+                                                                    </div>
+                                
+                                                                    <div class="col-6">
+                                                                        <label for="email">Address:</label>
+                                                                        <input type="email" class="form-control" v-model="payForm.email" readonly="" />
+                                                                        <small v-if="payFormErrors.email" class="text-danger">
+                                                                            {{ payFormErrors.email[0] }}
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="form-row">
+                                                                    <div class="col-4">
+                                                                        <label for="months">Select Month:</label>
+                                                                        <select v-model="payForm.month" class="form-control" required>
+                                                                            <option value="January" selected>January</option>
+                                                                            <option value="February">February</option>
+                                                                            <option value="March">March</option>
+                                                                            <option value="April">April</option>
+                                                                            <option value="May">May</option>
+                                                                            <option value="June">June</option>
+                                                                            <option value="July">July</option>
+                                                                            <option value="August">August</option>
+                                                                            <option value="September">September</option>
+                                                                            <option value="October">October</option>
+                                                                            <option value="November">November</option>
+                                                                            <option value="December">December</option>
+                                                                        </select>
+                                                                        <small v-if="payFormErrors.month" class="text-danger">
+                                                                            {{ payFormErrors.month[0] }}
+                                                                        </small>
+                                                                    </div>
+                                
+                                                                    <div class="col-4">
+                                                                        <label for="salary">Salary:</label>
+                                                                        <input type="number" class="form-control" v-model="payForm.amount" required/>
+                                                                        <small v-if="payFormErrors.amount" class="text-danger">
+                                                                            {{ payFormErrors.amount[0] }}
+                                                                        </small>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <label for="months">Select Type:</label>
+                                                                        <select v-model="payForm.type" class="form-control">
+                                                                            <option value="Base pay" selected>Base pay</option>
+                                                                            <option value="Commission">Commission</option>
+                                                                            <option value="Equity">Equity</option>
+                                                                            <option value="Benefits">Benefits</option>
+                                                                            <option value="Bonuses">Bonuses</option>
+                                                                        </select>
+                                                                        <small v-if="payFormErrors.type" class="text-danger">
+                                                                            {{ payFormErrors.type[0] }}
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary" @click="paySalaryMethod(payForm)">Pay</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </table>
                             </div>
                             <div class="card-footer"></div>
@@ -200,6 +293,15 @@ export default {
                 phone: null,
                 photo:null,
             },
+            payForm:{
+                id:null,
+                name: null,
+                email:null,
+                amount: null,
+                month:null,
+                type:null,
+            },
+            payFormErrors:{},
             editFormErrors:{}
         };
     },
@@ -263,6 +365,23 @@ export default {
             .catch((error) => {
                 this.editFormErrors = error.response.data.errors;
             })
+        },
+        paySalaryButton(employee){
+            this.payForm.id = employee.id;
+            this.payForm.name = employee.name;
+            this.payForm.email = employee.email;
+            this.payForm.amount = employee.salary;
+        },
+        paySalaryMethod(salary){
+            console.log(salary);
+            axios.post('../api/dashboard/salary/paid/'+this.payForm.id, salary)
+            .then(response=>{
+                Notification.success();
+            })
+            .catch(error => {
+            this.payFormErrors = error.response.data.errors;
+            Notification.error();
+        })
         },
         onFileSelected(event)
         {

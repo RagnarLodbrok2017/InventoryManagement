@@ -2291,6 +2291,15 @@ __webpack_require__.r(__webpack_exports__);
         phone: null,
         photo: null
       },
+      payForm: {
+        id: null,
+        name: null,
+        email: null,
+        amount: null,
+        month: null,
+        type: null
+      },
+      payFormErrors: {},
       editFormErrors: {}
     };
   },
@@ -2348,8 +2357,24 @@ __webpack_require__.r(__webpack_exports__);
         _this3.editFormErrors = error.response.data.errors;
       });
     },
-    onFileSelected: function onFileSelected(event) {
+    paySalaryButton: function paySalaryButton(employee) {
+      this.payForm.id = employee.id;
+      this.payForm.name = employee.name;
+      this.payForm.email = employee.email;
+      this.payForm.amount = employee.salary;
+    },
+    paySalaryMethod: function paySalaryMethod(salary) {
       var _this4 = this;
+      console.log(salary);
+      axios.post('../api/dashboard/salary/paid/' + this.payForm.id, salary).then(function (response) {
+        Notification.success();
+      })["catch"](function (error) {
+        _this4.payFormErrors = error.response.data.errors;
+        Notification.error();
+      });
+    },
+    onFileSelected: function onFileSelected(event) {
+      var _this5 = this;
       var file = event.target.files[0];
       if (file.size > 200473) {
         Notification.Image_validation();
@@ -2357,7 +2382,7 @@ __webpack_require__.r(__webpack_exports__);
         // console.log(event.target.files[0].size);
         var render = new FileReader();
         render.onload = function (event) {
-          _this4.editForm.photo = event.target.result;
+          _this5.editForm.photo = event.target.result;
         };
         render.readAsDataURL(file);
       }
@@ -2365,9 +2390,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     filtersearch: function filtersearch() {
-      var _this5 = this;
+      var _this6 = this;
       return this.employees.filter(function (employee) {
-        return employee.name.toLowerCase().includes(_this5.searchTerm.toLowerCase());
+        return employee.name.toLowerCase().includes(_this6.searchTerm.toLowerCase());
       });
     }
   }
@@ -5097,6 +5122,17 @@ var render = function render() {
         }
       }
     }, [_vm._v("Edit")]), _vm._v(" "), _c("button", {
+      staticClass: "btn btn-warning",
+      attrs: {
+        "data-toggle": "modal",
+        "data-target": ".paySalary-lg"
+      },
+      on: {
+        click: function click($event) {
+          return _vm.paySalaryButton(employee);
+        }
+      }
+    }, [_vm._v("Pay Salary")]), _vm._v(" "), _c("button", {
       staticClass: "btn btn-danger",
       on: {
         click: function click($event) {
@@ -5160,7 +5196,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.editFormErrors.name ? _c("small", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.name[0]) + "\n                                                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.editFormErrors.name[0]) + "\n                                                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-6"
   }, [_c("label", {
     attrs: {
@@ -5189,7 +5225,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.editFormErrors.email ? _c("small", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.email[0]) + "\n                                                                ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.editFormErrors.email[0]) + "\n                                                                    ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("div", {
     staticClass: "form-row"
@@ -5222,7 +5258,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.editFormErrors.address ? _c("small", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.address[0]) + "\n                                                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.editFormErrors.address[0]) + "\n                                                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-6"
   }, [_c("label", {
     attrs: {
@@ -5251,7 +5287,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.editFormErrors.salary ? _c("small", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.salary[0]) + "\n                                                                ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.editFormErrors.salary[0]) + "\n                                                                    ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("div", {
     staticClass: "form-row"
@@ -5261,7 +5297,7 @@ var render = function render() {
     attrs: {
       "for": "Joining Date"
     }
-  }, [_vm._v("Joining\n                                                                    Date:")]), _vm._v(" "), _c("input", {
+  }, [_vm._v("Joining\n                                                                        Date:")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -5284,7 +5320,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.editFormErrors.joining_date ? _c("small", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.joining_date[0]) + "\n                                                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.editFormErrors.joining_date[0]) + "\n                                                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-4"
   }, [_c("label", {
     attrs: {
@@ -5313,7 +5349,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.editFormErrors.nid ? _c("small", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.nid[0]) + "\n                                                                ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.editFormErrors.nid[0]) + "\n                                                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-4"
   }, [_c("label", {
     attrs: {
@@ -5342,7 +5378,7 @@ var render = function render() {
     }
   }), _vm._v(" "), _vm.editFormErrors.phone ? _c("small", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.phone[0]) + "\n                                                                ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.editFormErrors.phone[0]) + "\n                                                                    ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("div", {
     staticClass: "form-row"
@@ -5352,7 +5388,7 @@ var render = function render() {
     attrs: {
       "for": "Photo"
     }
-  }, [_vm._v("Upload Photo\n                                                                    :")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Upload Photo\n                                                                        :")]), _vm._v(" "), _c("div", {
     staticClass: "custom-file"
   }, [_c("input", {
     staticClass: "custom-file-input",
@@ -5382,7 +5418,7 @@ var render = function render() {
     staticClass: "col-3"
   }, [_vm.editFormErrors.photo ? _c("small", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                                                    " + _vm._s(_vm.editFormErrors.photo[0]) + "\n                                                                ")]) : _vm._e()])])])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.editFormErrors.photo[0]) + "\n                                                                    ")]) : _vm._e()])])])])])]), _vm._v(" "), _c("div", {
     staticClass: "modal-footer"
   }, [_c("button", {
     staticClass: "btn btn-secondary",
@@ -5400,7 +5436,270 @@ var render = function render() {
         return _vm.updateEmployee(_vm.editForm);
       }
     }
-  }, [_vm._v("Save Changes")])])])])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Save\n                                                    Changes")])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "modal fade paySalary-lg",
+    attrs: {
+      tabindex: "-1",
+      role: "dialog",
+      "aria-labelledby": "myLargeModalLabel2",
+      "aria-hidden": "true"
+    }
+  }, [_c("div", {
+    staticClass: "modal-dialog modal-lg"
+  }, [_c("div", {
+    staticClass: "modal-content"
+  }, [_vm._m(2), _vm._v(" "), _c("div", {
+    staticClass: "modal-body"
+  }, [_c("div", {
+    staticClass: "card-body"
+  }, [_c("form", {
+    on: {
+      submit: function submit($event) {
+        $event.preventDefault();
+        return _vm.paySalaryMethod.apply(null, arguments);
+      }
+    }
+  }, [_c("div", {
+    staticClass: "form-group"
+  }, [_c("div", {
+    staticClass: "form-row"
+  }, [_c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "name"
+    }
+  }, [_vm._v("Employee Name:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.payForm.name,
+      expression: "payForm.name"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      readonly: ""
+    },
+    domProps: {
+      value: _vm.payForm.name
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.payForm, "name", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.payFormErrors.name ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.payFormErrors.name[0]) + "\n                                                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "email"
+    }
+  }, [_vm._v("Address:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.payForm.email,
+      expression: "payForm.email"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "email",
+      readonly: ""
+    },
+    domProps: {
+      value: _vm.payForm.email
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.payForm, "email", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.payFormErrors.email ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.payFormErrors.email[0]) + "\n                                                                    ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("div", {
+    staticClass: "form-row"
+  }, [_c("div", {
+    staticClass: "col-4"
+  }, [_c("label", {
+    attrs: {
+      "for": "months"
+    }
+  }, [_vm._v("Select Month:")]), _vm._v(" "), _c("select", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.payForm.month,
+      expression: "payForm.month"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      required: ""
+    },
+    on: {
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val;
+        });
+        _vm.$set(_vm.payForm, "month", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
+      }
+    }
+  }, [_c("option", {
+    attrs: {
+      value: "January",
+      selected: ""
+    }
+  }, [_vm._v("January")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "February"
+    }
+  }, [_vm._v("February")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "March"
+    }
+  }, [_vm._v("March")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "April"
+    }
+  }, [_vm._v("April")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "May"
+    }
+  }, [_vm._v("May")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "June"
+    }
+  }, [_vm._v("June")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "July"
+    }
+  }, [_vm._v("July")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "August"
+    }
+  }, [_vm._v("August")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "September"
+    }
+  }, [_vm._v("September")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "October"
+    }
+  }, [_vm._v("October")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "November"
+    }
+  }, [_vm._v("November")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "December"
+    }
+  }, [_vm._v("December")])]), _vm._v(" "), _vm.payFormErrors.month ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.payFormErrors.month[0]) + "\n                                                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-4"
+  }, [_c("label", {
+    attrs: {
+      "for": "salary"
+    }
+  }, [_vm._v("Salary:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.payForm.amount,
+      expression: "payForm.amount"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "number",
+      required: ""
+    },
+    domProps: {
+      value: _vm.payForm.amount
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.payForm, "amount", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.payFormErrors.amount ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.payFormErrors.amount[0]) + "\n                                                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-4"
+  }, [_c("label", {
+    attrs: {
+      "for": "months"
+    }
+  }, [_vm._v("Select Type:")]), _vm._v(" "), _c("select", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.payForm.type,
+      expression: "payForm.type"
+    }],
+    staticClass: "form-control",
+    on: {
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val;
+        });
+        _vm.$set(_vm.payForm, "type", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
+      }
+    }
+  }, [_c("option", {
+    attrs: {
+      value: "Base pay",
+      selected: ""
+    }
+  }, [_vm._v("Base pay")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "Commission"
+    }
+  }, [_vm._v("Commission")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "Equity"
+    }
+  }, [_vm._v("Equity")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "Benefits"
+    }
+  }, [_vm._v("Benefits")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "Bonuses"
+    }
+  }, [_vm._v("Bonuses")])]), _vm._v(" "), _vm.payFormErrors.type ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.payFormErrors.type[0]) + "\n                                                                    ")]) : _vm._e()])])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "modal-footer"
+  }, [_c("button", {
+    staticClass: "btn btn-secondary",
+    attrs: {
+      type: "button",
+      "data-dismiss": "modal"
+    }
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      type: "submit"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.paySalaryMethod(_vm.payForm);
+      }
+    }
+  }, [_vm._v("Pay")])])])])])])]), _vm._v(" "), _c("div", {
     staticClass: "card-footer"
   })])])])])])]);
 };
@@ -5420,7 +5719,25 @@ var staticRenderFns = [function () {
     attrs: {
       id: "exampleModalCenterTitle"
     }
-  }, [_vm._v("\n                                                Edit Employee")]), _vm._v(" "), _c("button", {
+  }, [_vm._v("\n                                                    Edit Employee")]), _vm._v(" "), _c("button", {
+    staticClass: "close",
+    attrs: {
+      type: "button",
+      "data-dismiss": "modal",
+      "aria-label": "Close"
+    }
+  })]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "modal-header"
+  }, [_c("h5", {
+    staticClass: "modal-title",
+    attrs: {
+      id: "exampleModalCenterTitle"
+    }
+  }, [_vm._v("\n                                                    Edit Employee")]), _vm._v(" "), _c("button", {
     staticClass: "close",
     attrs: {
       type: "button",
