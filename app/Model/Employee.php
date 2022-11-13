@@ -19,7 +19,7 @@ class Employee extends Model
 
     protected $table = 'employees';
 
-    public function salary()
+    public function salaries()
     {
         return $this->hasMany('App\Model\Salary');
     }

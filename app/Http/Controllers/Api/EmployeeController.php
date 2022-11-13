@@ -16,7 +16,8 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::all();
+        $employees = Employee::with('salaries')->get();
+
         return response()->json($employees);
     }
 

@@ -39,7 +39,7 @@ class SalaryController extends Controller
             else{
                 return response()->json("Employee doesn't exist");
             }
-            
+
         }
     }
 }

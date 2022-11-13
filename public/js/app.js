@@ -2279,6 +2279,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       employees: [],
+      salaries: null,
       errors: {},
       searchTerm: '',
       editForm: {
@@ -2297,10 +2298,12 @@ __webpack_require__.r(__webpack_exports__);
         email: null,
         amount: null,
         month: null,
-        type: null
+        type: null,
+        salaries: null
       },
       payFormErrors: {},
-      editFormErrors: {}
+      editFormErrors: {},
+      months: []
     };
   },
   methods: {
@@ -2358,23 +2361,38 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     paySalaryButton: function paySalaryButton(employee) {
+      this.salaries = employee.salaries;
       this.payForm.id = employee.id;
       this.payForm.name = employee.name;
       this.payForm.email = employee.email;
       this.payForm.amount = employee.salary;
+      this.payForm.salaries = employee.salaries;
+      this.filterMonths();
     },
     paySalaryMethod: function paySalaryMethod(salary) {
       var _this4 = this;
-      console.log(salary);
       axios.post('../api/dashboard/salary/paid/' + this.payForm.id, salary).then(function (response) {
         Notification.success();
+        _this4.allEmployees();
       })["catch"](function (error) {
         _this4.payFormErrors = error.response.data.errors;
         Notification.error();
       });
     },
-    onFileSelected: function onFileSelected(event) {
+    filterMonths: function filterMonths() {
       var _this5 = this;
+      var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      this.months = months;
+      this.payForm.salaries.filter(function (salary) {
+        _this5.months.filter(function (month) {
+          if (month.toLowerCase().includes(salary.month.toLowerCase())) {
+            _this5.months.splice(_this5.months.indexOf(month), 1);
+          }
+        });
+      });
+    },
+    onFileSelected: function onFileSelected(event) {
+      var _this6 = this;
       var file = event.target.files[0];
       if (file.size > 200473) {
         Notification.Image_validation();
@@ -2382,7 +2400,7 @@ __webpack_require__.r(__webpack_exports__);
         // console.log(event.target.files[0].size);
         var render = new FileReader();
         render.onload = function (event) {
-          _this5.editForm.photo = event.target.result;
+          _this6.editForm.photo = event.target.result;
         };
         render.readAsDataURL(file);
       }
@@ -2390,9 +2408,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     filtersearch: function filtersearch() {
-      var _this6 = this;
+      var _this7 = this;
       return this.employees.filter(function (employee) {
-        return employee.name.toLowerCase().includes(_this6.searchTerm.toLowerCase());
+        return employee.name.toLowerCase().includes(_this7.searchTerm.toLowerCase());
       });
     }
   }
@@ -5553,56 +5571,13 @@ var render = function render() {
         _vm.$set(_vm.payForm, "month", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
       }
     }
-  }, [_c("option", {
-    attrs: {
-      value: "January",
-      selected: ""
-    }
-  }, [_vm._v("January")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "February"
-    }
-  }, [_vm._v("February")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "March"
-    }
-  }, [_vm._v("March")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "April"
-    }
-  }, [_vm._v("April")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "May"
-    }
-  }, [_vm._v("May")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "June"
-    }
-  }, [_vm._v("June")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "July"
-    }
-  }, [_vm._v("July")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "August"
-    }
-  }, [_vm._v("August")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "September"
-    }
-  }, [_vm._v("September")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "October"
-    }
-  }, [_vm._v("October")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "November"
-    }
-  }, [_vm._v("November")]), _vm._v(" "), _c("option", {
-    attrs: {
-      value: "December"
-    }
-  }, [_vm._v("December")])]), _vm._v(" "), _vm.payFormErrors.month ? _c("small", {
+  }, _vm._l(_vm.months, function (month) {
+    return _c("option", {
+      domProps: {
+        value: month
+      }
+    }, [_vm._v(_vm._s(month))]);
+  }), 0), _vm._v(" "), _vm.payFormErrors.month ? _c("small", {
     staticClass: "text-danger"
   }, [_vm._v("\n                                                                        " + _vm._s(_vm.payFormErrors.month[0]) + "\n                                                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
     staticClass: "col-4"
@@ -5681,7 +5656,23 @@ var render = function render() {
     }
   }, [_vm._v("Bonuses")])]), _vm._v(" "), _vm.payFormErrors.type ? _c("small", {
     staticClass: "text-danger"
-  }, [_vm._v("\n                                                                        " + _vm._s(_vm.payFormErrors.type[0]) + "\n                                                                    ")]) : _vm._e()])])])])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.payFormErrors.type[0]) + "\n                                                                    ")]) : _vm._e()])])]), _vm._v(" "), _c("div", {
+    staticClass: "card-footer"
+  }, [_c("div", {
+    staticClass: "form-row"
+  }, [_c("div", {
+    staticClass: "col-12"
+  }, [_c("h5", {
+    staticClass: "text-center"
+  }, [_vm._v("Salaries Paid")]), _vm._v(" "), _c("ul", {
+    staticClass: "list-inline"
+  }, _vm._l(_vm.payForm.salaries, function (salary) {
+    return _c("li", {
+      staticClass: "text-center list-inline-item"
+    }, [_c("button", {
+      staticClass: "btn btn-info"
+    }, [_vm._v(_vm._s(salary.month) + " : " + _vm._s(salary.amount) + " $")])]);
+  }), 0)])])])])])]), _vm._v(" "), _c("div", {
     staticClass: "modal-footer"
   }, [_c("button", {
     staticClass: "btn btn-secondary",
@@ -5715,10 +5706,7 @@ var staticRenderFns = [function () {
   return _c("div", {
     staticClass: "modal-header"
   }, [_c("h5", {
-    staticClass: "modal-title",
-    attrs: {
-      id: "exampleModalCenterTitle"
-    }
+    staticClass: "modal-title"
   }, [_vm._v("\n                                                    Edit Employee")]), _vm._v(" "), _c("button", {
     staticClass: "close",
     attrs: {
@@ -5733,10 +5721,7 @@ var staticRenderFns = [function () {
   return _c("div", {
     staticClass: "modal-header"
   }, [_c("h5", {
-    staticClass: "modal-title",
-    attrs: {
-      id: "exampleModalCenterTitle"
-    }
+    staticClass: "modal-title"
   }, [_vm._v("\n                                                    Edit Employee")]), _vm._v(" "), _c("button", {
     staticClass: "close",
     attrs: {

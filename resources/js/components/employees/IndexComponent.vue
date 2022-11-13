@@ -47,7 +47,7 @@
                                                     @click="editEmployee(employee)">Edit</button>
                                                 <button class="btn btn-warning" data-toggle="modal" data-target=".paySalary-lg"
                                                     @click="paySalaryButton(employee)">Pay Salary</button>
-                                
+
                                                 <button @click="deleteEmployee(employee.id)" class="btn btn-danger">Delete</button>
                                             </td>
                                         </tr>
@@ -58,7 +58,7 @@
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                    <h5 class="modal-title">
                                                         Edit Employee</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     </button>
@@ -76,7 +76,7 @@
                                                                             {{ editFormErrors.name[0] }}
                                                                         </small>
                                                                     </div>
-                                
+
                                                                     <div class="col-6">
                                                                         <label for="email">Address:</label>
                                                                         <input type="email" class="form-control"
@@ -97,7 +97,7 @@
                                                                             {{ editFormErrors.address[0] }}
                                                                         </small>
                                                                     </div>
-                                
+
                                                                     <div class="col-6">
                                                                         <label for="salary">Salary:</label>
                                                                         <input type="number" class="form-control" placeholder="Enter Employee Salary"
@@ -119,7 +119,7 @@
                                                                             {{ editFormErrors.joining_date[0] }}
                                                                         </small>
                                                                     </div>
-                                
+
                                                                     <div class="col-4">
                                                                         <label for="text">Nid:</label>
                                                                         <input type="text" class="form-control" placeholder="Enter Your Nid"
@@ -157,7 +157,7 @@
                                                                             {{ editFormErrors.photo[0] }}
                                                                         </small>
                                                                     </div>
-                                
+
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -171,12 +171,14 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                     <!-- Pay Salary Form -->
                                     <div class="modal fade paySalary-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel2"
                                         aria-hidden="true">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                    <h5 class="modal-title">
                                                         Edit Employee</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     </button>
@@ -193,7 +195,7 @@
                                                                             {{ payFormErrors.name[0] }}
                                                                         </small>
                                                                     </div>
-                                
+
                                                                     <div class="col-6">
                                                                         <label for="email">Address:</label>
                                                                         <input type="email" class="form-control" v-model="payForm.email" readonly="" />
@@ -208,7 +210,8 @@
                                                                     <div class="col-4">
                                                                         <label for="months">Select Month:</label>
                                                                         <select v-model="payForm.month" class="form-control" required>
-                                                                            <option value="January" selected>January</option>
+                                                                            <option v-for="month in months" :value="month">{{ month }}</option>
+                                                                            <!-- <option value="January">January</option>
                                                                             <option value="February">February</option>
                                                                             <option value="March">March</option>
                                                                             <option value="April">April</option>
@@ -219,13 +222,13 @@
                                                                             <option value="September">September</option>
                                                                             <option value="October">October</option>
                                                                             <option value="November">November</option>
-                                                                            <option value="December">December</option>
+                                                                            <option value="December">December</option> -->
                                                                         </select>
                                                                         <small v-if="payFormErrors.month" class="text-danger">
                                                                             {{ payFormErrors.month[0] }}
                                                                         </small>
                                                                     </div>
-                                
+
                                                                     <div class="col-4">
                                                                         <label for="salary">Salary:</label>
                                                                         <input type="number" class="form-control" v-model="payForm.amount" required/>
@@ -248,7 +251,18 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            
+                                                            <div class="card-footer">
+                                                                <div class="form-row">
+                                                                    <div class="col-12">
+                                                                        <h5 class="text-center">Salaries Paid</h5>
+                                                                        <ul class="list-inline">
+                                                                            <li class="text-center list-inline-item" v-for="salary in payForm.salaries">
+                                                                                <button class="btn btn-info">{{ salary.month }} : {{ salary.amount }} $</button>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -281,6 +295,7 @@ export default {
     data() {
         return {
             employees: [],
+            salaries:null,
             errors: {},
             searchTerm: '',
             editForm: {
@@ -300,9 +315,11 @@ export default {
                 amount: null,
                 month:null,
                 type:null,
+                salaries:null,
             },
             payFormErrors:{},
-            editFormErrors:{}
+            editFormErrors:{},
+            months:[]
         };
     },
     methods: {
@@ -367,21 +384,39 @@ export default {
             })
         },
         paySalaryButton(employee){
+            this.salaries = employee.salaries;
             this.payForm.id = employee.id;
             this.payForm.name = employee.name;
             this.payForm.email = employee.email;
             this.payForm.amount = employee.salary;
+            this.payForm.salaries = employee.salaries;
+            this.filterMonths();
         },
         paySalaryMethod(salary){
-            console.log(salary);
             axios.post('../api/dashboard/salary/paid/'+this.payForm.id, salary)
             .then(response=>{
                 Notification.success();
+                this.allEmployees();
             })
             .catch(error => {
             this.payFormErrors = error.response.data.errors;
             Notification.error();
         })
+        },
+        filterMonths()
+        {
+            let months = ['January','February','March','April','May','June',
+            'July','August','September','October','November','December',
+        ];
+        this.months = months;
+            this.payForm.salaries.filter(salary => {
+                 this.months.filter(month => {
+                    if(month.toLowerCase().includes(salary.month.toLowerCase()) )
+                    {
+                        this.months.splice(this.months.indexOf(month), 1);
+                    }
+                });
+            })
         },
         onFileSelected(event)
         {
@@ -399,7 +434,6 @@ export default {
                 render.readAsDataURL(file);
             }
         },
-
     },
     computed: {
         filtersearch() {
