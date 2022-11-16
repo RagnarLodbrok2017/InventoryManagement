@@ -148,6 +148,7 @@
                                             <th>Sell Price</th>
                                             <th>Category</th>
                                             <th>Supplier</th>
+                                            <th>Status</th>
                                             <th>Quantity</th>
                                             <th>Action</th>
                                         </tr>
@@ -160,6 +161,16 @@
                                             <td>{{ product.selling_price }}</td>
                                             <td>{{ product.category.name }}</td>
                                             <td>{{ product.supplier.name }}</td>
+                                            <td v-if="product.quantity >= 1 ">
+                                                <button class="btn btn-outline-success">
+                                                    <span class="badge badge-success">Available</span>
+                                                </button>
+                                            </td>
+                                            <td v-else>
+                                                <button class="btn btn-outline-danger">
+                                                    <span class="badge badge-danger">Stock-Out</span>
+                                                </button>
+                                             </td>
                                             <td>{{ product.quantity }}</td>
                                             <td>
                                                 <button class="btn btn-success">Profile</button>
@@ -272,7 +283,6 @@
                                                                         {{ errors.photo[0] }}
                                                                     </small>
                                                                 </div>
-
                                                             </div>
                                                         </form>
                                                     </div>
