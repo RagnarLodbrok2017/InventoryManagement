@@ -2696,6 +2696,161 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/salaries/indexComponent.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/salaries/indexComponent.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push("/login");
+    }
+    this.fetchSalaries();
+  },
+  data: function data() {
+    return {
+      salaries: [],
+      errors: {},
+      searchTerm: "",
+      editForm: {
+        name: '',
+        description: ''
+      },
+      addFrom: {
+        name: '',
+        description: ''
+      }
+    };
+  },
+  methods: {
+    fetchSalaries: function fetchSalaries() {
+      var _this = this;
+      axios.get('../api/dashboard/salary').then(function (response) {
+        _this.salaries = response.data;
+        console.log(_this.salaries);
+      })["catch"](function (error) {
+        _this.errors = error.response.errors;
+      });
+    },
+    editSalary: function editSalary(salary) {
+      this.editForm.id = salary.id;
+      this.editForm.month = salary.month;
+      this.editForm.amount = salary.amount;
+      this.errors = "";
+    }
+  },
+  computed: {
+    filterSearch: function filterSearch() {
+      var _this2 = this;
+      return this.salaries.filter(function (salary) {
+        return salary.month.toLowerCase().includes(_this2.searchTerm.toLowerCase());
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/salaries/viewComponent.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/salaries/viewComponent.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push("/login");
+    }
+    this.viewSalaries();
+  },
+  data: function data() {
+    return {
+      month: null,
+      salaries: [],
+      errors: {},
+      searchTerm: "",
+      editForm: {},
+      addFrom: {}
+    };
+  },
+  methods: {
+    viewSalaries: function viewSalaries() {
+      var _this = this;
+      this.month = this.$route.params.month;
+      axios.get("/api/dashboard/salary/view/" + this.month).then(function (response) {
+        _this.salaries = response.data;
+      })["catch"](function (error) {
+        _this.errors = error.response.errors;
+      });
+    },
+    editSalary: function editSalary(salary) {
+      this.editForm.id = salary.id;
+      this.editForm.month = salary.month;
+      this.editForm.amount = salary.amount;
+      this.editForm.type = salary.type;
+      this.editForm.employee_name = salary.name;
+      this.errors = "";
+    },
+    updateSalary: function updateSalary(salary) {
+      var _this2 = this;
+      axios.put("/api/dashboard/salary/view/" + this.editForm.id, salary).then(function (response) {
+        Notification.success();
+        _this2.viewSalaries();
+        _this2.errors = "";
+      })["catch"](function (error) {
+        _this2.errors = error.response.data.errors;
+      });
+    },
+    deleteSalary: function deleteSalary(id) {
+      var _this3 = this;
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          axios["delete"]('/api/dashboard/salary/view/' + id).then(function () {
+            _this3.salaries = _this3.salaries.filter(function (salary) {
+              return salary.id != id;
+              Notification.success();
+            });
+          })["catch"](function (error) {
+            if (error.response.data.errors) {
+              _this3.errors = error.response.data.errors;
+              Notifications.error();
+            }
+            _this3.$router.push('/dashboard/index-salary');
+          });
+          Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+        }
+      });
+    }
+  },
+  computed: {
+    filterSearch: function filterSearch() {
+      var _this4 = this;
+      return this.salaries.filter(function (salary) {
+        return salary.month.toLowerCase().includes(_this4.searchTerm.toLowerCase());
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/suppliers/CreateComponent.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/suppliers/CreateComponent.vue?vue&type=script&lang=js& ***!
@@ -7044,6 +7199,417 @@ var staticRenderFns = [function () {
       id: "exampleModalCenterTitle"
     }
   }, [_vm._v("Edit Product")]), _vm._v(" "), _c("button", {
+    staticClass: "close",
+    attrs: {
+      type: "button",
+      "data-dismiss": "modal",
+      "aria-label": "Close"
+    }
+  })]);
+}];
+render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/salaries/indexComponent.vue?vue&type=template&id=0ba353d7&":
+/*!********************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/salaries/indexComponent.vue?vue&type=template&id=0ba353d7& ***!
+  \********************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    attrs: {
+      id: "index-salary"
+    }
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-lg-12"
+  }, [_c("div", {
+    staticClass: "card mb-4"
+  }, [_c("div", {
+    staticClass: "card-header py-3 d-flex flex-row align-items-center justify-content-between"
+  }, [_c("h5", {
+    staticClass: "m-0 font-weight-bold text-primary"
+  }, [_vm._v("All Categories :")]), _vm._v(" "), _c("router-link", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      to: "/dashboard/index-employee"
+    }
+  }, [_vm._v("Add Salary")]), _vm._v(" "), _c("router-link", {
+    staticClass: "btn btn-danger",
+    attrs: {
+      to: "/dashboard/create-salary"
+    }
+  }, [_vm._v("\n                        Delete all Categories\n                    ")])], 1), _vm._v(" "), _c("div", {
+    staticClass: "card-body"
+  }, [_c("div", {
+    staticClass: "card"
+  }, [_c("div", {
+    staticClass: "card-header py-3 d-flex flex-row align-items-center justify-content-between"
+  }, [_c("h6", {
+    staticClass: "m-0 font-weight-bold text-primary"
+  }, [_vm._v("Categories Table")]), _vm._v(" "), _c("div", {
+    staticClass: "col-4"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.searchTerm,
+      expression: "searchTerm"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Search Here"
+    },
+    domProps: {
+      value: _vm.searchTerm
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.searchTerm = $event.target.value;
+      }
+    }
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "table-responsive"
+  }, [_c("table", {
+    staticClass: "table align-items-center table-flush"
+  }, [_vm._m(0), _vm._v(" "), _c("tbody", _vm._l(_vm.filterSearch, function (salary) {
+    return _c("tr", {
+      key: salary.id
+    }, [_c("td", [_vm._v(_vm._s(salary.month))]), _vm._v(" "), _c("td", [_vm._v(" " + _vm._s(salary.total_salary))]), _vm._v(" "), _c("router-link", {
+      staticClass: "btn btn-primary",
+      attrs: {
+        to: {
+          name: "view-salary",
+          params: {
+            month: salary.month
+          }
+        }
+      }
+    }, [_vm._v("View Salary")])], 1);
+  }), 0)])]), _vm._v(" "), _c("div", {
+    staticClass: "card-footer"
+  })])])])])])]);
+};
+var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("thead", {
+    staticClass: "thead-light"
+  }, [_c("tr", [_c("th", [_vm._v("Month Name")]), _vm._v(" "), _c("th", [_vm._v("Total Salary")]), _vm._v(" "), _c("th", [_vm._v("Details")])])]);
+}];
+render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/salaries/viewComponent.vue?vue&type=template&id=75d4b57c&":
+/*!*******************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/salaries/viewComponent.vue?vue&type=template&id=75d4b57c& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    attrs: {
+      id: "index-salary"
+    }
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-lg-12"
+  }, [_c("div", {
+    staticClass: "card mb-4"
+  }, [_c("div", {
+    staticClass: "card-header py-3 d-flex flex-row align-items-center justify-content-between"
+  }, [_c("h5", {
+    staticClass: "m-0 font-weight-bold text-primary"
+  }, [_vm._v("Salaries of " + _vm._s(_vm.month) + ":")]), _vm._v(" "), _c("router-link", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      to: "/dashboard/index-employee"
+    }
+  }, [_vm._v("Add Salary")]), _vm._v(" "), _c("router-link", {
+    staticClass: "btn btn-info",
+    attrs: {
+      to: "/dashboard/index-salary"
+    }
+  }, [_vm._v("\n                        All Salaries\n                    ")])], 1), _vm._v(" "), _c("div", {
+    staticClass: "card-body"
+  }, [_c("div", {
+    staticClass: "card"
+  }, [_c("div", {
+    staticClass: "card-header py-3 d-flex flex-row align-items-center justify-content-between"
+  }, [_c("h6", {
+    staticClass: "m-0 font-weight-bold text-primary"
+  }, [_vm._v("Salaries Table")]), _vm._v(" "), _c("div", {
+    staticClass: "col-4"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.searchTerm,
+      expression: "searchTerm"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Search Here"
+    },
+    domProps: {
+      value: _vm.searchTerm
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.searchTerm = $event.target.value;
+      }
+    }
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "table-responsive"
+  }, [_c("table", {
+    staticClass: "table align-items-center table-flush"
+  }, [_vm._m(0), _vm._v(" "), _c("tbody", _vm._l(_vm.filterSearch, function (salary) {
+    return _c("tr", {
+      key: salary.id
+    }, [_c("td", [_vm._v(_vm._s(salary.name))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(salary.month))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(salary.amount))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(salary.date))]), _vm._v(" "), _c("td", [_c("button", {
+      staticClass: "btn btn-primary",
+      attrs: {
+        "data-toggle": "modal",
+        "data-target": ".editSalary-lg"
+      },
+      on: {
+        click: function click($event) {
+          return _vm.editSalary(salary);
+        }
+      }
+    }, [_vm._v("Edit Salary")]), _vm._v(" "), _c("button", {
+      staticClass: "btn btn-danger",
+      on: {
+        click: function click($event) {
+          return _vm.deleteSalary(salary.id);
+        }
+      }
+    }, [_vm._v("Delete Salary")])])]);
+  }), 0), _vm._v(" "), _c("div", {
+    staticClass: "modal fade editSalary-lg",
+    attrs: {
+      tabindex: "-1",
+      role: "dialog",
+      "aria-labelledby": "myLargeModalLabel",
+      "aria-hidden": "true"
+    }
+  }, [_c("div", {
+    staticClass: "modal-dialog modal-lg"
+  }, [_c("div", {
+    staticClass: "modal-content"
+  }, [_vm._m(1), _vm._v(" "), _c("div", {
+    staticClass: "modal-body"
+  }, [_c("div", {
+    staticClass: "card-body"
+  }, [_c("form", {
+    on: {
+      submit: function submit($event) {
+        $event.preventDefault();
+      }
+    }
+  }, [_c("div", {
+    staticClass: "form-group"
+  }, [_c("div", {
+    staticClass: "form-row"
+  }, [_c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "name"
+    }
+  }, [_vm._v("Employee Name:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.employee_name,
+      expression: "editForm.employee_name"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      readonly: ""
+    },
+    domProps: {
+      value: _vm.editForm.employee_name
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.editForm, "employee_name", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "months"
+    }
+  }, [_vm._v("Select Month:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.month,
+      expression: "editForm.month"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      readonly: ""
+    },
+    domProps: {
+      value: _vm.editForm.month
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.editForm, "month", $event.target.value);
+      }
+    }
+  })])])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("div", {
+    staticClass: "form-row"
+  }, [_c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "salary"
+    }
+  }, [_vm._v("Salary:")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.amount,
+      expression: "editForm.amount"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "number",
+      required: ""
+    },
+    domProps: {
+      value: _vm.editForm.amount
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.editForm, "amount", $event.target.value);
+      }
+    }
+  }), _vm._v(" "), _vm.errors.amount ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.errors.amount[0]) + "\n                                                                    ")]) : _vm._e()]), _vm._v(" "), _c("div", {
+    staticClass: "col-6"
+  }, [_c("label", {
+    attrs: {
+      "for": "months"
+    }
+  }, [_vm._v("Select Type:")]), _vm._v(" "), _c("select", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.editForm.type,
+      expression: "editForm.type"
+    }],
+    staticClass: "form-control",
+    on: {
+      change: function change($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val;
+        });
+        _vm.$set(_vm.editForm, "type", $event.target.multiple ? $$selectedVal : $$selectedVal[0]);
+      }
+    }
+  }, [_c("option", {
+    attrs: {
+      value: "Base pay",
+      selected: ""
+    }
+  }, [_vm._v("Base pay")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "Commission"
+    }
+  }, [_vm._v("Commission")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "Equity"
+    }
+  }, [_vm._v("Equity")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "Benefits"
+    }
+  }, [_vm._v("Benefits")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "Bonuses"
+    }
+  }, [_vm._v("Bonuses")])]), _vm._v(" "), _vm.errors.type ? _c("small", {
+    staticClass: "text-danger"
+  }, [_vm._v("\n                                                                        " + _vm._s(_vm.errors.type[0]) + "\n                                                                    ")]) : _vm._e()])])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "modal-footer"
+  }, [_c("button", {
+    staticClass: "btn btn-secondary",
+    attrs: {
+      type: "button",
+      "data-dismiss": "modal"
+    }
+  }, [_vm._v("Close")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      type: "submit"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.updateSalary(_vm.editForm);
+      }
+    }
+  }, [_vm._v("Save Changes")])])])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "card-footer"
+  })])])])])])]);
+};
+var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("thead", {
+    staticClass: "thead-light"
+  }, [_c("tr", [_c("th", [_vm._v("Employee Name")]), _vm._v(" "), _c("th", [_vm._v("Month")]), _vm._v(" "), _c("th", [_vm._v("Salary")]), _vm._v(" "), _c("th", [_vm._v("Date")]), _vm._v(" "), _c("th", [_vm._v("Actions")])])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "modal-header"
+  }, [_c("h5", {
+    staticClass: "modal-title",
+    attrs: {
+      id: "exampleModalCenterTitle"
+    }
+  }, [_vm._v("Edit Salary")]), _vm._v(" "), _c("button", {
     staticClass: "close",
     attrs: {
       type: "button",
@@ -67134,6 +67700,144 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/salaries/indexComponent.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/salaries/indexComponent.vue ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _indexComponent_vue_vue_type_template_id_0ba353d7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./indexComponent.vue?vue&type=template&id=0ba353d7& */ "./resources/js/components/salaries/indexComponent.vue?vue&type=template&id=0ba353d7&");
+/* harmony import */ var _indexComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./indexComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/salaries/indexComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _indexComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _indexComponent_vue_vue_type_template_id_0ba353d7___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _indexComponent_vue_vue_type_template_id_0ba353d7___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/salaries/indexComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/salaries/indexComponent.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/salaries/indexComponent.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_indexComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./indexComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/salaries/indexComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_indexComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/salaries/indexComponent.vue?vue&type=template&id=0ba353d7&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/salaries/indexComponent.vue?vue&type=template&id=0ba353d7& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_indexComponent_vue_vue_type_template_id_0ba353d7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../node_modules/vue-loader/lib??vue-loader-options!./indexComponent.vue?vue&type=template&id=0ba353d7& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/salaries/indexComponent.vue?vue&type=template&id=0ba353d7&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_indexComponent_vue_vue_type_template_id_0ba353d7___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_indexComponent_vue_vue_type_template_id_0ba353d7___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/salaries/viewComponent.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/components/salaries/viewComponent.vue ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _viewComponent_vue_vue_type_template_id_75d4b57c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./viewComponent.vue?vue&type=template&id=75d4b57c& */ "./resources/js/components/salaries/viewComponent.vue?vue&type=template&id=75d4b57c&");
+/* harmony import */ var _viewComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./viewComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/salaries/viewComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _viewComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _viewComponent_vue_vue_type_template_id_75d4b57c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _viewComponent_vue_vue_type_template_id_75d4b57c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/salaries/viewComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/salaries/viewComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/salaries/viewComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_viewComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./viewComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/salaries/viewComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_viewComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/salaries/viewComponent.vue?vue&type=template&id=75d4b57c&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/salaries/viewComponent.vue?vue&type=template&id=75d4b57c& ***!
+  \*******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_viewComponent_vue_vue_type_template_id_75d4b57c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!../../../../node_modules/vue-loader/lib??vue-loader-options!./viewComponent.vue?vue&type=template&id=75d4b57c& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/salaries/viewComponent.vue?vue&type=template&id=75d4b57c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_viewComponent_vue_vue_type_template_id_75d4b57c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ref_6_node_modules_vue_loader_lib_index_js_vue_loader_options_viewComponent_vue_vue_type_template_id_75d4b57c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/suppliers/CreateComponent.vue":
 /*!***************************************************************!*\
   !*** ./resources/js/components/suppliers/CreateComponent.vue ***!
@@ -67322,6 +68026,10 @@ var IndexProductComponent = __webpack_require__(/*! ./components/products/indexC
 
 //Expenses Routes
 var IndexExpenseComponent = __webpack_require__(/*! ./components/expenses/indexComponent.vue */ "./resources/js/components/expenses/indexComponent.vue")["default"];
+
+//Salary Routes
+var IndexSalaryComponent = __webpack_require__(/*! ./components/salaries/indexComponent.vue */ "./resources/js/components/salaries/indexComponent.vue")["default"];
+var ViewSalaryComponent = __webpack_require__(/*! ./components/salaries/viewComponent.vue */ "./resources/js/components/salaries/viewComponent.vue")["default"];
 var routes = [{
   path: '/login',
   name: 'login',
@@ -67395,6 +68103,14 @@ var routes = [{
   path: '/dashboard/index-expense',
   name: 'index-expense',
   component: IndexExpenseComponent
+}, {
+  path: '/dashboard/index-salary',
+  name: 'index-salary',
+  component: IndexSalaryComponent
+}, {
+  path: '/dashboard/index-salary/view/:month',
+  name: 'view-salary',
+  component: ViewSalaryComponent
 }];
 
 /***/ }),

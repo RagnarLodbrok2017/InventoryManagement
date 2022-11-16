@@ -21,6 +21,10 @@ let IndexProductComponent = require('./components/products/indexComponent.vue').
 //Expenses Routes
 let IndexExpenseComponent = require('./components/expenses/indexComponent.vue').default;
 
+//Salary Routes
+let IndexSalaryComponent = require('./components/salaries/indexComponent.vue').default;
+let ViewSalaryComponent = require('./components/salaries/viewComponent.vue').default;
+
 
 
 
@@ -113,5 +117,16 @@ export const routes = [
         name: 'index-expense',
         component:IndexExpenseComponent
     },
+    {
+        path:'/dashboard/index-salary',
+        name: 'index-salary',
+        component:IndexSalaryComponent
+    },
+    {
+        path:'/dashboard/index-salary/view/:month',
+        name: 'view-salary',
+        component:ViewSalaryComponent
+
+    }
 
 ]
