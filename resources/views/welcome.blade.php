@@ -39,6 +39,25 @@
                     </li>
                     <hr class="sidebar-divider">
                     <div class="sidebar-heading">
+                        POS Management
+                    </div>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                            data-target="#collapseShopping" aria-expanded="true" aria-controls="collapseBootstrap">
+                            <i class="far fa-fw fa-window-maximize"></i>
+                            <span>Shopping</span>
+                        </a>
+                        <div id="collapseShopping" class="collapse" aria-labelledby="headingBootstrap"
+                            data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Orders Control</h6>
+                                <router-link :to="{name:'shopping-card'}" class="collapse-item">Shopping Card</router-link>
+                                <router-link to="/dashboard/index-employee" class="collapse-item">All Employees</router-link>
+                            </div>
+                        </div>
+                    </li>
+                    <hr class="sidebar-divider">
+                    <div class="sidebar-heading">
                         Features
                     </div>
                     <li class="nav-item">
@@ -69,6 +88,21 @@
                                 <h6 class="collapse-header">Supliers Control</h6>
                                 <router-link to="/dashboard/create-supplier" class="collapse-item">Add Suppliers</router-link>
                                 <router-link to="/dashboard/index-supplier" class="collapse-item">All Suppliers</router-link>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                            data-target="#collapseBootstrap3" aria-expanded="true" aria-controls="collapseBootstrap">
+                            <i class="far fa-fw fa-window-maximize"></i>
+                            <span>Customers</span>
+                        </a>
+                        <div id="collapseBootstrap3" class="collapse" aria-labelledby="headingBootstrap"
+                            data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Customers Control</h6>
+                                <router-link :to="{name:'create-customer'}" class="collapse-item">Add Customers</router-link>
+                                <router-link :to="{name:'index-customer'}" class="collapse-item">All Customers</router-link>
                             </div>
                         </div>
                     </li>
@@ -368,7 +402,7 @@
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
                             <span>copyright &copy; developed by<b>
-                                    <a href="https://indrijunanda.gitlab.io/" target="_blank">Ahmed Elnakieb</a></b>
+                                    <a href="Ahmed Rezk Mohamed" target="_blank">Ahmed Elnakieb</a></b>
                             </span>
                         </div>
                     </div>

@@ -25,6 +25,13 @@ let IndexExpenseComponent = require('./components/expenses/indexComponent.vue').
 let IndexSalaryComponent = require('./components/salaries/indexComponent.vue').default;
 let ViewSalaryComponent = require('./components/salaries/viewComponent.vue').default;
 
+//Customer Routes
+let CreateCustomerComponent = require('./components/customers/CreateComponent.vue').default;
+let IndexCustomerComponent = require('./components/customers/IndexComponent.vue').default;
+
+//Pos Management Routes
+let indexShoppingComponent = require('./components/pos/indexShoppingComponent.vue').default;
+
 
 
 
@@ -127,6 +134,21 @@ export const routes = [
         name: 'view-salary',
         component:ViewSalaryComponent
 
-    }
+    },
+    {
+        path:'/dashboard/create-customer',
+        name : 'create-customer',
+        component: CreateCustomerComponent
+    },
+    {
+        path:'/dashboard/index-customer',
+        name : 'index-customer',
+        component: IndexCustomerComponent
+    },
+    {
+        path:'/dashboard/index-shopping',
+        name : 'shopping-card',
+        component: indexShoppingComponent
+    },
 
 ]

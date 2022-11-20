@@ -90,17 +90,18 @@ class CategoryController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $category = Category::find($id);
         if($category){
             $category->delete();
         }
+    }
+
+    // get Products of category by id
+    public function getProducts($id)
+    {
+        $products = Category::find($id)->product;
+        return response()->json($products);
     }
 }

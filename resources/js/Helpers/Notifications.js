@@ -55,6 +55,31 @@ class Notification {
             timeout:1500,
         }).show();
     };
+    successWithMessage(message){
+        new Noty({
+            type: 'success',
+            layout: 'topRight',
+            text: message,
+            timeout:1500,
+        }).show();
+    };
+    errorWithMessage(message){
+        new Noty({
+            type: 'error',
+            layout: 'topRight',
+            text: message,
+            timeout:1500,
+        }).show();
+    };
+    warningWithMessage(message){
+        new Noty({
+            type: 'warning',
+            layout: 'topRight',
+            text: message,
+            timeout:1500,
+        }).show();
+    };
+
 
 
 }
