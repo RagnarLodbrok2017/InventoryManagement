@@ -29,6 +29,11 @@ class User {
             return false;
         }
     }
+    getToken()
+    {
+        return AppStorage.getToken();
+
+    }
     loggedIn()
     {
         return this.hasToken();

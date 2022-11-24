@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::group([
 
     'middleware' => 'api',
-    'prefix' => 'auth'
+    'prefix' => 'auth',
 
 ], function ($router) {
 
@@ -26,6 +26,8 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
+    Route::get('user','AuthController@getUser');
+    Route::get('refreshtoken','AuthController@refreshToken');
 });
 
 Route::apiResource('/dashboard/employee', 'Api\EmployeeController');
@@ -49,10 +51,15 @@ Route::Delete('/dashboard/salary/view/{id}', 'Api\salaryController@deleteSalary'
 Route::apiResource('/dashboard/customer', 'Api\CustomerController');
 
 // Shopping card Routes
-Route::Post('/dashboard/shoppingcart/{id}', 'Api\ShoppingCartController@storeByClick');
-Route::Delete('/dashboard/shoppingcart/{id}', 'Api\ShoppingCartController@delete');
-Route::Get('/dashboard/shoppingcart','Api\ShoppingCartController@index');
 
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('home', 'AuthController@home');
-//     });
+Route::group(['middleware' => ['JWT']], function() {
+    Route::Post('/dashboard/shoppingcart/{id}', 'Api\ShoppingCartController@storeByClick');
+    Route::Delete('/dashboard/shoppingcart/{id}', 'Api\ShoppingCartController@delete');
+    Route::Get('/dashboard/shoppingcart','Api\ShoppingCartController@index');
+    Route::get('user2','AuthController@getAuthenticatedUser');
+});
+    Route::any('{any}', function(){
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Resource not found'], 404);
+     })->where('any', '.*');;

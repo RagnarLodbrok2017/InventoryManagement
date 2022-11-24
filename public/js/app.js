@@ -2723,9 +2723,13 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchcategories();
     this.fetchCustomers();
     this.fetchShoppingCarts();
+    // this.getUser();
+    this.refreshToken();
   },
   data: function data() {
     return {
+      user: {},
+      user2: {},
       products: [],
       categories: [],
       getProducts: [],
@@ -2742,12 +2746,56 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    fetchProducts: function fetchProducts() {
+    getUser: function getUser() {
       var _this = this;
-      axios.get('../api/dashboard/product').then(function (response) {
-        _this.products = response.data;
+      axios.get('/api/auth/user').then(function (response) {
+        _this.user = response.data;
       })["catch"](function (error) {
-        _this.errors = error.response.errors;
+        // console.log(error.response.data.error);
+      });
+    },
+    refreshToken: function refreshToken() {
+      axios.get('/api/auth/refreshtoken').then(function (res) {
+        //   console.log(res.data);
+        User.responeAfterLogin(res);
+        Toast.fire({
+          icon: "success",
+          title: "Token refershed"
+        });
+      });
+    },
+    // getUser(){
+    //     axios.get('/api/auth/user',{
+    // getUser(){
+    //     axios.get('/api/auth/user',{
+    //         headers: {
+    //           'Authorization': 'Bearer ' + User.getToken()
+    //         }
+    //     })
+    //         .then(response => {
+    //             this.user = response.data;
+    //         })
+    //         .catch(error => {
+    //             this.errors = error.response.errors;
+    //         });
+    //         axios.get('/api/user2',{
+    //         headers: {
+    //           'Authorization': 'Bearer ' + User.getToken()
+    //         }
+    //     })
+    //         .then(response => {
+    //             this.user2 = response.data;
+    //         })
+    //         .catch(error => {
+    //             this.errors = error.response.errors;
+    //         });
+    // },
+    fetchProducts: function fetchProducts() {
+      var _this2 = this;
+      axios.get('../api/dashboard/product').then(function (response) {
+        _this2.products = response.data;
+      })["catch"](function (error) {
+        _this2.errors = error.response.errors;
       });
     },
     editExpense: function editExpense(product) {
@@ -2758,49 +2806,49 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = "";
     },
     fetchcategories: function fetchcategories() {
-      var _this2 = this;
+      var _this3 = this;
       axios.get('../api/dashboard/category').then(function (response) {
-        _this2.categories = response.data;
+        _this3.categories = response.data;
       })["catch"](function (error) {
         Notification.error();
       });
     },
     getProductsByCategory: function getProductsByCategory(id) {
-      var _this3 = this;
+      var _this4 = this;
       axios.get('/api/dashboard/category/' + id + '/products').then(function (response) {
-        _this3.products = response.data;
+        _this4.products = response.data;
       })["catch"](function () {
-        console.log(_this3.errors);
+        console.log(_this4.errors);
       });
     },
     fetchCustomers: function fetchCustomers() {
-      var _this4 = this;
+      var _this5 = this;
       axios.get('/api/dashboard/customer').then(function (response) {
-        _this4.customers = response.data;
+        _this5.customers = response.data;
       });
     },
     addToShoppingcard: function addToShoppingcard(id) {
-      var _this5 = this;
+      var _this6 = this;
       axios.post('/api/dashboard/shoppingcart/' + id).then(function (response) {
         Notification.successWithMessage('Product Added to ShoppingCart');
-        _this5.fetchShoppingCarts();
+        _this6.fetchShoppingCarts();
       })["catch"](function (error) {
         Notification.error;
       });
     },
     fetchShoppingCarts: function fetchShoppingCarts() {
-      var _this6 = this;
+      var _this7 = this;
       axios.get('/api/dashboard/shoppingcart').then(function (response) {
-        _this6.carts = response.data;
+        _this7.carts = response.data;
       })["catch"](function (error) {
-        _this6.errors = error.response.data.errros;
+        _this7.errors = error.response.data.errros;
       });
     },
     removeItemFromCart: function removeItemFromCart(id) {
-      var _this7 = this;
+      var _this8 = this;
       axios["delete"]('/api/dashboard/shoppingcart/' + id).then(function (response) {
         Notification.successWithMessage('Product removed !');
-        _this7.fetchShoppingCarts();
+        _this8.fetchShoppingCarts();
       })["catch"](function () {
         Notification.error();
       });
@@ -2808,9 +2856,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     filterSearch: function filterSearch() {
-      var _this8 = this;
+      var _this9 = this;
       return this.products.filter(function (product) {
-        return product.name.toLowerCase().includes(_this8.searchTerm.toLowerCase());
+        return product.name.toLowerCase().includes(_this9.searchTerm.toLowerCase());
       });
     }
   }
@@ -68281,6 +68329,11 @@ var User = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "getToken",
+    value: function getToken() {
+      return _AppStorage__WEBPACK_IMPORTED_MODULE_1__["default"].getToken();
+    }
+  }, {
     key: "loggedIn",
     value: function loggedIn() {
       return this.hasToken();
@@ -68361,6 +68414,54 @@ var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.mixin({
   }
 });
 window.Toast = Toast;
+
+// axios.defaults.headers.common['Authorization'] = 'Bearer ' + User.getToken();
+var refreshToken = function refreshToken() {
+  // gets new access token
+  axios.get('/api/auth/refreshtoken').then(function (response) {
+    console.log(response.data);
+    // User.responeAfterLogin(res);
+    Toast.fire({
+      icon: "success",
+      title: "Token refershed"
+    });
+  })["catch"](function (error) {
+    console.log("catch error" + error);
+  });
+};
+axios.interceptors.request.use(function (config) {
+  var token = localStorage.getItem('token');
+  if (token) {
+    config.headers['Authorization'] = 'Bearer ' + token;
+  }
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
+axios.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  // console.log("the error is "+ error);
+  var _error$response = error.response,
+    config = _error$response.config,
+    data = _error$response.data,
+    status = _error$response.status;
+  if (status == 401 && data.error === 'token_expired_and_refreshed') {
+    console.log('token_expired_and_refreshed');
+    refreshToken();
+  }
+  if (status == 401 && data.error === 'token_expired') {
+    console.log('token_expired');
+    // console.log(data.error);
+    refreshToken();
+  }
+  if (status == 401 && data.error === 'token_invalid') {
+    console.log('token_invalid');
+    // console.log(data.error);
+    // this.refreshToken();
+    _Helpers_User__WEBPACK_IMPORTED_MODULE_3__["default"].responeAfterLogin(error.response.data.token);
+  }
+});
 
 //import Notification Helpers
 

@@ -298,9 +298,13 @@ export default {
         this.fetchcategories();
         this.fetchCustomers();
         this.fetchShoppingCarts();
+        // this.getUser();
+        this.refreshToken();
     },
     data() {
         return {
+            user:{},
+            user2:{},
             products: [],
             categories:[],
             getProducts:[],
@@ -317,6 +321,52 @@ export default {
         }
     },
     methods: {
+        getUser(){
+            axios.get('/api/auth/user')
+               .then((response) => {
+                    this.user = response.data;
+               })
+               .catch(error =>{
+                // console.log(error.response.data.error);
+               })
+            },
+        refreshToken() {
+            axios.get('/api/auth/refreshtoken')
+                .then((res) => {
+                    //   console.log(res.data);
+                    User.responeAfterLogin(res);
+                    Toast.fire({
+                        icon: "success",
+                        title: "Token refershed",
+                    });
+                })
+            },
+        // getUser(){
+        //     axios.get('/api/auth/user',{
+        // getUser(){
+        //     axios.get('/api/auth/user',{
+        //         headers: {
+        //           'Authorization': 'Bearer ' + User.getToken()
+        //         }
+        //     })
+        //         .then(response => {
+        //             this.user = response.data;
+        //         })
+        //         .catch(error => {
+        //             this.errors = error.response.errors;
+        //         });
+        //         axios.get('/api/user2',{
+        //         headers: {
+        //           'Authorization': 'Bearer ' + User.getToken()
+        //         }
+        //     })
+        //         .then(response => {
+        //             this.user2 = response.data;
+        //         })
+        //         .catch(error => {
+        //             this.errors = error.response.errors;
+        //         });
+        // },
         fetchProducts() {
             axios.get('../api/dashboard/product')
                 .then(response => {

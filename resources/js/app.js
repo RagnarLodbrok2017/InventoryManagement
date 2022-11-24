@@ -32,6 +32,61 @@ const Toast = Swal.mixin({
 });
 window.Toast = Toast;
 
+// axios.defaults.headers.common['Authorization'] = 'Bearer ' + User.getToken();
+const refreshToken= ()=>{
+    // gets new access token
+    axios.get('/api/auth/refreshtoken')
+    .then((response) => {
+        console.log(response.data);
+        // User.responeAfterLogin(res);
+        Toast.fire({
+            icon: "success",
+            title: "Token refershed",
+        });
+    })
+    .catch(error =>{
+        console.log("catch error"+ error);
+    })
+  };
+axios.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem('token');
+        if(token)
+        {
+            config.headers['Authorization'] = 'Bearer '+ token;
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+
+);
+axios.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        // console.log("the error is "+ error);
+        const { config, data, status } = error.response;
+        if ((status == 401) && (data.error === 'token_expired_and_refreshed')) {
+            console.log('token_expired_and_refreshed');
+            refreshToken();
+        }
+        if ((status == 401) && (data.error === 'token_expired')) {
+            console.log('token_expired');
+            // console.log(data.error);
+            refreshToken();
+        }
+        if ((status == 401) && (data.error === 'token_invalid')) {
+            console.log('token_invalid');
+            // console.log(data.error);
+            // this.refreshToken();
+            User.responeAfterLogin(error.response.data.token);
+        }
+    }
+);
+
 //import Notification Helpers
 import Notification from './Helpers/Notifications';
 window.Notification = Notification;
