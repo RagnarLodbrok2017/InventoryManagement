@@ -18,7 +18,7 @@ class CreateShoppingCartTable extends Migration
             $table->string('product_name');
             $table->integer('quantity')->default(1);
             $table->integer('product_price')->nullable()->default(0);
-            $table->integer('total_price')->nullable()->default(0);
+            $table->integer('total_payment')->nullable()->default(0);
             $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');
             $table->unsignedBigInteger('customer_id')->nullable();

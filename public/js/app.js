@@ -7799,7 +7799,7 @@ var render = function render() {
       domProps: {
         value: cart.quantity
       }
-    })]), _vm._v(" "), _c("td", [_vm._v(_vm._s(cart.product_price))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(cart.total_price))]), _vm._v(" "), _c("td", [_c("a", {
+    })]), _vm._v(" "), _c("td", [_vm._v(_vm._s(cart.product_price))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(cart.total_payment))]), _vm._v(" "), _c("td", [_c("a", {
       staticClass: "btn btn-sm btn-primary",
       on: {
         click: function click($event) {

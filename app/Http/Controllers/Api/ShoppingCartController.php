@@ -37,7 +37,7 @@ class ShoppingCartController extends Controller
         //sub_total
         $sub_total = ShoppingCart::groupBy('user_id')
         ->where('user_id', $this->user->id)
-        ->selectRaw('sum(total_price) as sub_total')
+        ->selectRaw('sum(total_payment) as sub_total')
         ->get();
         return response()->json(['carts'=>$carts, 'product_quantity'=>$product_quantity,'sub_total'=>$sub_total]);
     }
@@ -64,12 +64,12 @@ class ShoppingCartController extends Controller
                 $cart->product_price = $product->selling_price;
                 $cart->product_name = $product->name;
                 $cart->quantity = 1;
-                $cart->total_price = ($product->selling_price * $cart->quantity);
+                $cart->total_payment = ($product->selling_price * $cart->quantity);
                 $cart->save();
             }
             else{
                 $existProd->quantity = $existProd->quantity + 1;
-                $existProd->total_price = ($existProd->product_price * $existProd->quantity);
+                $existProd->total_payment = ($existProd->product_price * $existProd->quantity);
                 $existProd->save();
             }
         }

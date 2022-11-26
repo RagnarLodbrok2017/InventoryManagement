@@ -37,7 +37,7 @@
                                             :value="cart.quantity">
                                     </td>
                                     <td>{{ cart.product_price }}</td>
-                                    <td>{{ cart.total_price }}</td>
+                                    <td>{{ cart.total_payment }}</td>
                                     <td><a @click="removeItemFromCart(cart.id)" class="btn btn-sm btn-primary">
                                             <font color="#ffffff">X</font>
                                         </a></td>

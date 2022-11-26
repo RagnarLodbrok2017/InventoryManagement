@@ -68,11 +68,16 @@ class OrderController extends Controller
         $order->date = date('Y/m/d');
         $order->save();
 
-        // $products = ShoppingCart::where('user_id', $user_id)->get();
         $shoppingcarts = $this->user->shoppingCart;
-        $products = $shoppingcarts->map->only(['product_id','quantity','total_price']);
-        $order->products()->attach($products);
-        return response()->json(["order"=>$order,"products"=>$products]);
+        if($order->id && $shoppingcarts)
+        {
+            $shoppingcarts = $this->user->shoppingCart;
+            $products = $shoppingcarts->map->only(['product_id','quantity','total_payment']);
+            $order->products()->attach($products);
+            $this->user->shoppingCart()->delete();
+        }
+        // return response()->json(["order"=>$order,"products"=>$products]);
+        return response()->json("Order Compeleted");
     }
 
     /**
