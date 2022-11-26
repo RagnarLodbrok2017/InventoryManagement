@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Model\Expense;
+use DB;
+use App\Model\Order;
+use App\Model\ShoppingCart;
 
-class ExpenseController extends Controller
+
+class OrderController extends Controller
 {
+    protected $user;
     public function __construct()
     {
-        $this->middleware('JWT');
+        $this->user = auth()->user();
+        $this->Middleware('JWT');
     }
     /**
      * Display a listing of the resource.
@@ -19,8 +24,8 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        $expenses = Expense::all();
-        return response()->json($expenses);
+        $orders = DB::table('orders')->get();
+        return reponse()->json($orders);
     }
 
     /**
@@ -41,17 +46,33 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'details'=>'required|max:255',
-            'amount' => 'required|numeric',
-            'expense_date' => 'nullable|date'
+        $request->validate([
+            'customer_id' => 'required|numeric',
+            'payment_id' => 'required|numeric',
+            'discount' => 'nullable|max:255|numeric',
+            'tax' => 'required|numeric',
+            'product_quantity' => 'required|numeric',
+            'total_payment' => 'required|numeric',
         ]);
-        // date_default_timezone_set("Africa/cairo");
-        $expense = new Expense();
-        $expense->details = $request->details;
-        $expense->amount = $request->amount;
-        $expense->expense_date = date('Y/m/d');
-        $expense->save();
+        $user_id = $this->user->id;
+        $order = new Order();
+        $order->user_id = $user_id;
+        $order->customer_id = $request->customer_id;
+        $order->payment_id = $request->payment_id;
+        $order->discount = $request->discount;
+        $order->tax = $request->tax;
+        $order->product_quantity = $request->product_quantity;
+        $order->total_payment = $request->total_payment;
+        $order->month = date('F');
+        $order->year = date('Y');
+        $order->date = date('Y/m/d');
+        $order->save();
+
+        // $products = ShoppingCart::where('user_id', $user_id)->get();
+        $shoppingcarts = $this->user->shoppingCart;
+        $products = $shoppingcarts->map->only(['product_id','quantity','total_price']);
+        $order->products()->attach($products);
+        return response()->json(["order"=>$order,"products"=>$products]);
     }
 
     /**
@@ -85,21 +106,7 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'details'=>'required|max:255',
-            'amount' => 'required|numeric',
-            'expense_date' => 'nullable|date'
-        ]);
-        $expense = Expense::find($id);
-        if($expense)
-        {
-            $expense->update($request->all());
-        }
-        else{
-
-            return response()->json(['errors' => "Expense didn't exist!"], 422);
-        }
-
+        //
     }
 
     /**
@@ -110,9 +117,6 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-        $expense = Expense::where('id', $id)->first();
-        if ($expense){
-            $expense->delete();
-        }
+        //
     }
 }

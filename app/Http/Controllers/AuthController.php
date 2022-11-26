@@ -33,8 +33,6 @@ class AuthController extends Controller
         ]);
 
         $credentials = request(['email', 'password']);
-        $myTTL = 1; //minutes
-        JWTAuth::factory()->setTTL($myTTL);
 
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Invalid Email or Password'], 401);
@@ -106,88 +104,21 @@ class AuthController extends Controller
 
     public function getUser()
     {
-        // $user = auth()->user();
-        $user = Auth::User();
-        // $user = JWTAuth::parseToken()->authenticate();
-        // $user = Auth::guard('api')->user();
-        // $user = JWTAuth::parseToken()->authenticate();
+        $user = auth()->user();
         return response()->json($user);
-        // dd($token);
-        // $user = auth()->user();
-        // dd($user);
-        // dd("done");
-    //     if (! $user = JWTAuth::parseToken()->authenticate()) {
-    //         return response()->json(['user_not_found'], 404);
-    // }
-
-        // return response()->json(auth()->user());
     }
-    public function getAuthenticatedUser()
-            {
-                try {
-                    if (! $user = JWTAuth::parseToken()->authenticate()) {
-                        return response()->json(['user_not_found'], 404);
-                    }
-                } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-                    return response()->json(['token_expired'], $e->getStatusCode());
-
-                } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-                    return response()->json(['token_invalid'], $e->getStatusCode());
-
-                } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-                    return response()->json(['token_absent'], $e->getStatusCode());
-                }
-
-                return response()->json(compact('user'));
-            }
-
-            public function refreshToken(){
-                if(auth()->user())
-                {
-                    dd(auth()->user());
-                    $newtoken = auth()->refresh();
-                    return $this->respondWithToken($newtoken);
-                }
+    public function refreshToken(){
+        if(auth()->user())
+        {
+            dd(auth()->user());
+            $newtoken = auth()->refresh();
+            return $this->respondWithToken($newtoken);
+        }
                 else {
                     return response()->json([
                         "error" => "Not Auth"
                     ], 400);
                 }
             }
-    // public function refreshToken()
-    // {
-    //     $newtoken = auth()->refresh();
-    //     return $this->respondWithToken($newtoken);
-    //     try {
-    //         if (!JWTAuth::parseToken()->authenticate()) {
-    //             return response()->json("not authenticated", 401);
-    //         }
-
-    //         //refresh token
-    //         $newtoken = auth()->refresh();
-    //         $this->respondWithToken($newtoken); // or assign original token that hasn't expired yet.
-    //         // dd("new token"+$newtoken);
-    //         // return $this->authService->respondWithToken($newtoken);
-    //     } catch (TokenExpiredException $e) {
-    //         // Access token has expired
-    //         try {
-    //             $newtoken = auth()->refresh();
-    //             $this->respondWithToken($newtoken);
-    //             return $this->authService->respondWithToken($newtoken);
-    //         } catch (TokenExpiredException $e) {
-    //             // Refresh token has expired
-    //             return response()->json([
-    //                 "message" => $e->getMessage()
-    //             ], 401);
-    //         } catch (TokenBlacklistedException $e) {
-    //             // Access token has be list to blacklist. You must re-log into the system.
-    //             return response()->json([
-    //                 "message" => $e->getMessage()
-    //             ], 401);
-    //         }
-    //     } catch (\Exception $e) {
-    //         return response()->json([], 400);
-    //     }
-    // }
 
 }

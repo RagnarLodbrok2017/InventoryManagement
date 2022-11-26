@@ -9,6 +9,10 @@ use Image;
 
 class EmployeeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('JWT');
+    }
     /**
      * Display a listing of the resource.
      *

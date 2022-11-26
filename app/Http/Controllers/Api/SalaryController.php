@@ -10,6 +10,10 @@ use DB;
 
 class SalaryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('JWT');
+    }
     public function index()
     {
         $salaries = Salary::groupBy('month')

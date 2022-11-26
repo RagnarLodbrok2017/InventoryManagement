@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Validator;
 
 class ShoppingCartController extends Controller
 {
+    protected $user;
     public function __construct()
     {
+        $this->user = auth()->user();
         // $this->user = JWTAuth::parseToken()->authenticate();
 
         $this->middleware('JWT');
@@ -26,8 +28,18 @@ class ShoppingCartController extends Controller
 
     public function index()
     {
-        $carts = ShoppingCart::all();
-        return response()->json($carts);
+        $carts = ShoppingCart::where('user_id', $this->user->id)->get();
+        //to get the total product quantity
+        $product_quantity = ShoppingCart::groupBy('user_id')
+        ->where('user_id', $this->user->id)
+        ->selectRaw('sum(quantity) as product_quantity')
+        ->get();
+        //sub_total
+        $sub_total = ShoppingCart::groupBy('user_id')
+        ->where('user_id', $this->user->id)
+        ->selectRaw('sum(total_price) as sub_total')
+        ->get();
+        return response()->json(['carts'=>$carts, 'product_quantity'=>$product_quantity,'sub_total'=>$sub_total]);
     }
 
 
@@ -38,18 +50,28 @@ class ShoppingCartController extends Controller
         // dd($product);
         $user = auth()->user();
         // $user = JWTAuth::user();
-
-        // dd($user);
+        $existProd = ShoppingCart::where('product_id' , $product->id)
+        ->where('user_id', $this->user->id)
+        ->first();
         if($product)
         {
-            $cart = new ShoppingCart;
-            $cart->user_id = $user->id;
-            $cart->product_id = $product->id;
-            $cart->product_price = $product->selling_price;
-            $cart->product_name = $product->name;
-            $cart->quantity = 1;
-            $cart->total_price = ($product->selling_price * $cart->quantity);
-            $cart->save();
+            if(!$existProd)
+            {
+                // new product in shopping carts
+                $cart = new ShoppingCart;
+                $cart->user_id = $user->id;
+                $cart->product_id = $product->id;
+                $cart->product_price = $product->selling_price;
+                $cart->product_name = $product->name;
+                $cart->quantity = 1;
+                $cart->total_price = ($product->selling_price * $cart->quantity);
+                $cart->save();
+            }
+            else{
+                $existProd->quantity = $existProd->quantity + 1;
+                $existProd->total_price = ($existProd->product_price * $existProd->quantity);
+                $existProd->save();
+            }
         }
         else{
             return response()->json('error');

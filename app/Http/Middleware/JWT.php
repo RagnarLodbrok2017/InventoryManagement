@@ -24,29 +24,37 @@ class JWT
     public function handle($request, Closure $next)
     {
         try{
-            if (!JWTAuth::parseToken()->authenticate()) {
-            return response()->json("", 401);
-            }
+            $user = JWTAuth::parseToken()->authenticate();
             return $next($request);
+
         }
-        catch (TokenExpiredException $e) {
+        catch (\Exception $e) {
+            if($e instanceof TokenExpiredException)
+            {
+                $newToken = JWTAuth::parseToken()->refresh();
                 return response()->json([
-                    'error' => 'token_expired',
-                    'refresh' => false,
+                    'success' => false,
+                    'token' => $newToken,
+                    'status' => 'expired'
+                ], 403);
+            }
+            else if($e instanceof TokenBlacklistedException)
+            {
+                $newToken = JWTAuth::parseToken()->refresh();
+                return response()->json([
+                    'success' => false,
+                    'token' => $newToken,
+                    'status' => 'blacklist'
                 ], 401);
-        } catch (TokenInvalidException $e) {
-            \Log::debug('token invalid');
-            return response()->json([
-                'error' => 'token_invalid',
-            ], 401);
-        } catch (TokenBlacklistedException $e) {
-            \Log::debug('token blacklisted');
-            return response()->json([
-                'error' => 'token_blacklisted',
-            ], 401);
-        } catch (JWTException  $e) {
-            return response()->json([], 400);
+            }
+            else if($e instanceof TokenInvalidException)
+            {
+                return response()->json([
+                    'success' => false,
+                    'token' => 'null',
+                    'status' => 'Invalid'
+                ], 400);
+            }
         }
-        return $next($request);
     }
 }

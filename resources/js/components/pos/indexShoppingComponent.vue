@@ -10,7 +10,7 @@
             </ol>
         </div>
         <div class="row mb-3">
-            <!-- Shopping Card -->
+            <!-- Shopping Cart -->
             <div class="col-xl-5 col-lg-5">
                 <div class="card">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -18,6 +18,7 @@
                         <a class="m-0 float-right btn btn-danger btn-sm" href="#">View More <i
                                 class="fas fa-chevron-right"></i></a>
                     </div>
+                    <!-- Shopping cart table -->
                     <div class="table-responsive" style="font-size: 12px;">
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
@@ -30,10 +31,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <tr v-for="cart in carts" :key="cart.id">
                                     <td>{{ cart.product_name }}</td>
-                                    <td><input type="text" readonly="" style="width: 15px;"
+                                    <td><input type="text" readonly="" style="width: 22px;"
                                             :value="cart.quantity">
                                     </td>
                                     <td>{{ cart.product_price }}</td>
@@ -42,64 +42,70 @@
                                             <font color="#ffffff">X</font>
                                         </a></td>
                                 </tr>
-
-
                             </tbody>
                         </table>
                     </div>
-                    <!-- <div class="card-footer">
+                    <div class="card-footer">
+                        <form @submit.prevent="orderDone">
+                        <div class="row col-12">
+                            <div class="form-group col-6">
+                                <div class="form-row">
+                                    <label>Tax</label>
+                                    <input type="number" class="form-control" v-model="form.tax">
+                                </div>
+                            </div>
+                            <div class="form-group col-6">
+                                <div class="form-row">
+                                    <label>Discount</label>
+                                    <input type="number" class="form-control" v-model="form.discount">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center">Total
                                 Quantity:
-                                <strong>{{ qty }}</strong>
+                                <strong>{{ form.product_quantity }}</strong>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">Sub Total:
-                                <strong>{{ subtotal }} $</strong>
+                                <strong>{{ form.sub_total }} $</strong>
                             </li>
 
-                            <li class="list-group-item d-flex justify-content-between align-items-center">Vat:
-                                <strong>{{ vats.vat }} %</strong>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">Tax:
+                                <strong>
+                                    {{ form.tax }} %
+                                </strong>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">Discount:
+                                <strong>
+                                    {{ form.discount }} %
+                                </strong>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">Total :
-                                <strong>{{ subtotal * vats.vat / 100 + subtotal }} $</strong>
+                                <strong>{{ total_payment }} $</strong>
                             </li>
 
                         </ul>
                         <br>
 
-                        <form @submit.prevent="orderdone">
                             <label>Customer Name</label>
-                            <select class="form-control" v-model="customer_id">
-                                <option :value="customer.id" v-for="customer in customers">{{ customer.name }}
-                                </option>
-
+                            <select class="form-control" v-model="form.customer_id">
+                                <option :value="customer.id" v-for="customer in customers">{{ customer.name }}</option>
                             </select>
 
-                            <label>Pay</label>
-                            <input type="text" class="form-control" required="" v-model="pay">
-
-                            <label>Due</label>
-                            <input type="text" class="form-control" required="" v-model="due">
-
                             <label>Pay By</label>
-                            <select class="form-control" v-model="payby">
-                                <option value="HandCash">Hand Cash </option>
-                                <option value="Cheaque">Cheaque </option>
-                                <option value="GiftCard">Gift Card </option>
+                            <select class="form-control" v-model="form.payment_id">
+                                <option :value="payment.id" v-for="payment in payments">{{ payment.type }}</option>
                             </select>
 
                             <br>
                             <button type="submit" class="btn btn-success">Submit</button>
-
                         </form>
-
-
-
-                    </div> -->
+                    </div>
                 </div>
             </div>
             <!-- Products From Customer -->
-            <div class="col-xl-7 col-lg-7 mb-4">
+            <div  class="col-xl-7 col-lg-7 mb-4">
                 <div class="card">
                     <div class="card-header py-3 bg-primary d-flex flex-row align-items-center justify-content-between">
                         <div class="col-6">
@@ -298,20 +304,32 @@ export default {
         this.fetchcategories();
         this.fetchCustomers();
         this.fetchShoppingCarts();
+        this.fetchPayments();
         // this.getUser();
-        this.refreshToken();
+        // this.refreshToken();
     },
     data() {
         return {
             user:{},
-            user2:{},
             products: [],
             categories:[],
             getProducts:[],
             customers:[],
+            payments:[],
             carts:[],
             errors: {},
             product: {},
+
+            form: {
+                customer_id:null,
+                payment_id:null,
+                tax: 5,
+                discount: 0,
+                total_payment: null,
+                product_quantity: null,
+                sub_total: null,
+            },
+
             searchTerm: "",
             editForm: {
                 details: null,
@@ -321,52 +339,21 @@ export default {
         }
     },
     methods: {
-        getUser(){
+        orderDone() {
+            axios.post('/api/dashboard/order', this.form)
+            .then(response => {
+                Notification.successWithMessage('Order Done');
+            })
+        },
+        getUser() {
             axios.get('/api/auth/user')
-               .then((response) => {
+                .then((response) => {
                     this.user = response.data;
-               })
-               .catch(error =>{
-                // console.log(error.response.data.error);
-               })
-            },
-        refreshToken() {
-            axios.get('/api/auth/refreshtoken')
-                .then((res) => {
-                    //   console.log(res.data);
-                    User.responeAfterLogin(res);
-                    Toast.fire({
-                        icon: "success",
-                        title: "Token refershed",
-                    });
                 })
-            },
-        // getUser(){
-        //     axios.get('/api/auth/user',{
-        // getUser(){
-        //     axios.get('/api/auth/user',{
-        //         headers: {
-        //           'Authorization': 'Bearer ' + User.getToken()
-        //         }
-        //     })
-        //         .then(response => {
-        //             this.user = response.data;
-        //         })
-        //         .catch(error => {
-        //             this.errors = error.response.errors;
-        //         });
-        //         axios.get('/api/user2',{
-        //         headers: {
-        //           'Authorization': 'Bearer ' + User.getToken()
-        //         }
-        //     })
-        //         .then(response => {
-        //             this.user2 = response.data;
-        //         })
-        //         .catch(error => {
-        //             this.errors = error.response.errors;
-        //         });
-        // },
+                .catch(error => {
+                    // console.log(error.response.data.error);
+                })
+        },
         fetchProducts() {
             axios.get('../api/dashboard/product')
                 .then(response => {
@@ -417,17 +404,28 @@ export default {
                 this.fetchShoppingCarts();
             })
             .catch(error => {
-                Notification.error;
+                Notification.error();
             })
         },
         fetchShoppingCarts()
         {
             axios.get('/api/dashboard/shoppingcart')
             .then(response=> {
-                this.carts = response.data;
+                this.carts = response.data.carts;
+                this.form.product_quantity = parseFloat(response.data.product_quantity[0].product_quantity);
+                this.form.sub_total = response.data.sub_total[0].sub_total;
             })
             .catch(error => {
                 this.errors = error.response.data.errros;
+            })
+        },
+        fetchPayments(){
+            axios.get('/api/dashboard/payment')
+            .then(response =>{
+                this.payments = response.data;
+            })
+            .catch(error => {
+                Notification.errorWithMessage('Please add a Payment Method!');
             })
         },
         removeItemFromCart(id){
@@ -448,6 +446,11 @@ export default {
                 return product.name.toLowerCase().includes(this.searchTerm.toLowerCase());
             });
         },
+        total_payment(){
+            let total_tax = this.form.sub_total * this.form.tax /100;
+            let total_discount = this.form.sub_total * this.form.discount /100;
+            return this.form.total_payment = parseFloat(this.form.sub_total) + (total_tax) - (total_discount);
+        }
     },
 }
 </script>

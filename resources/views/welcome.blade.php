@@ -138,6 +138,14 @@
                             </span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link">
+                            <i class="fas fa-fw fa-palette"></i>
+                            <span>
+                                <router-link to="/dashboard/index-payment">Payments</router-link>
+                            </span>
+                        </a>
+                    </li>
                     <hr class="sidebar-divider">
                     <div class="sidebar-heading">
                         Examples
@@ -166,7 +174,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/logout" class="nav-link" href="forms.html">
+                        <router-link to="/logout" class="nav-link">
                             <i class="fab fa-fw fa-wpforms"></i>
                             <span>Logout</span>
                         </router-link>
@@ -362,7 +370,7 @@
                                     <img class="img-profile rounded-circle" src="{{ asset('backend/img/boy.png') }}"
                                         style="max-width: 60px">
                                     <router-link to="/logout" class="ml-2 d-none d-lg-inline text-white small">
-                                        Logout
+                                        {{ auth()->user() }}
                                     </router-link>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -380,10 +388,10 @@
                                         Activity Log
                                     </a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="login.html">
+                                    <router-link to="/logout" class="dropdown-item">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
-                                    </a>
+                                    </router-link>
                                 </div>
                             </li>
                         </ul>

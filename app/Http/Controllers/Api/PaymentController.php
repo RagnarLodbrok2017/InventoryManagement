@@ -4,14 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Model\Category;
+use App\Model\Payment;
 
-class CategoryController extends Controller
+class PaymentController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('JWT');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -19,8 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return response()->json($categories);
+        $payments = Payment::all();
+        return response()->json($payments);
     }
 
     /**
@@ -41,11 +37,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'name' => 'required|max:255|unique:categories',
-            'description' => 'nullable|max:255'
+        $request->validate([
+            'type'=> 'required|string|max:255|unique:payments',
+            'cardDetails' => 'nullable|string',
         ]);
-        Category::create($request->all());
+        $payment = Payment::create($request->all());
     }
 
     /**
@@ -79,33 +75,31 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'name'=> 'required|unique:categories,name,'.$id,
-            'description'=> 'nullable|max:255'
+        $request->validate([
+            'type'=> 'required|string|max:255|unique:payments,type,'. $request->get('id'),
+            'cardDetails' => 'nullable|string',
         ]);
-        $category = Category::find($id);
-        if($validated && $category)
+        $payment = Payment::find($id);
+        if($payment)
         {
-            $category->update($request->all());
-            // $category = Category::update([
-            //     'name' => $request->name,
-            //     'description' => $request->description,
-            // ]);
+            $payment->update($request->all());
+            return response()->json(['success' => 'Payment updated successfully.']);
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
-        $category = Category::find($id);
-        if($category){
-            $category->delete();
+        $payment = Payment::firstOrDefault($id);
+        if($payment)
+        {
+            $payment->delete();
+            return response()->json(['success' => 'Payment deleted successfully.']);
         }
-    }
-
-    // get Products of category by id
-    public function getProducts($id)
-    {
-        $products = Category::find($id)->product;
-        return response()->json($products);
     }
 }

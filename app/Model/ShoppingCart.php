@@ -11,4 +11,9 @@ class ShoppingCart extends Model
     ];
 
     protected $table = 'shopping_cart';
+
+    public function product()
+    {
+        return $this->hasMany('App\Model\Product', 'product_id','id');
+    }
 }
