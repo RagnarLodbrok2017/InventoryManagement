@@ -29,16 +29,19 @@ class ShoppingCartController extends Controller
     public function index()
     {
         $carts = ShoppingCart::where('user_id', $this->user->id)->get();
-        //to get the total product quantity
-        $product_quantity = ShoppingCart::groupBy('user_id')
-        ->where('user_id', $this->user->id)
-        ->selectRaw('sum(quantity) as product_quantity')
-        ->get();
-        //sub_total
-        $sub_total = ShoppingCart::groupBy('user_id')
-        ->where('user_id', $this->user->id)
-        ->selectRaw('sum(total_payment) as sub_total')
-        ->get();
+        if($carts){
+            //to get the total product quantity
+            $product_quantity = ShoppingCart::groupBy('user_id')
+            ->where('user_id', $this->user->id)
+            ->selectRaw('sum(quantity) as product_quantity')
+            ->get();
+
+            //sub_total
+            $sub_total = ShoppingCart::groupBy('user_id')
+            ->where('user_id', $this->user->id)
+            ->selectRaw('sum(total_payment) as sub_total')
+            ->get();
+        }
         return response()->json(['carts'=>$carts, 'product_quantity'=>$product_quantity,'sub_total'=>$sub_total]);
     }
 
@@ -47,14 +50,11 @@ class ShoppingCartController extends Controller
     public function storeByClick($id)
     {
         $product = DB::table('products')->where('id', $id)->first();
-        // dd($product);
         $user = auth()->user();
-        // $user = JWTAuth::user();
-        $existProd = ShoppingCart::where('product_id' , $product->id)
-        ->where('user_id', $this->user->id)
-        ->first();
-        if($product)
+
+        if($product && $product->quantity > 0)
         {
+            $existProd = ShoppingCart::where('product_id' , $product->id)->where('user_id', $this->user->id)->first();
             if(!$existProd)
             {
                 // new product in shopping carts
@@ -72,9 +72,13 @@ class ShoppingCartController extends Controller
                 $existProd->total_payment = ($existProd->product_price * $existProd->quantity);
                 $existProd->save();
             }
+            //Update quantity of the product
+            $product = DB::table('products')->where('id', $id)->update(['quantity' => DB::raw('quantity -'. 1)]);
+
+            return response()->json(['message' => "The Product Added to Shopping Cart"], 200);
         }
         else{
-            return response()->json('error');
+            return response()->json(['message' => "The product Sold out"], 201);
         }
     }
 
@@ -84,6 +88,8 @@ class ShoppingCartController extends Controller
         if($cart)
         {
             $cart->delete();
+            DB::table('products')->where('id', $cart->product_id)
+            ->update(['quantity'=> DB::raw('quantity +'.$cart->quantity)]);
         }
     }
 }

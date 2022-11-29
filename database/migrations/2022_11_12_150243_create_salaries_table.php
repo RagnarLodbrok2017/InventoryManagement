@@ -23,7 +23,7 @@ class CreateSalariesTable extends Migration
             $table->text('type')->nullable()->default('Base pay');
 
             $table->unsignedBigInteger('employee_id');
-            $table->foreign('employee_id')->references('id')->on('employees')->ondelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
 
             $table->unique(['employee_id', 'month']);
 

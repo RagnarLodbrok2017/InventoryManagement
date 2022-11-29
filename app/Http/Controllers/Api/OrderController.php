@@ -71,7 +71,6 @@ class OrderController extends Controller
         $shoppingcarts = $this->user->shoppingCart;
         if($order->id && $shoppingcarts)
         {
-            $shoppingcarts = $this->user->shoppingCart;
             $products = $shoppingcarts->map->only(['product_id','quantity','total_payment']);
             $order->products()->attach($products);
             $this->user->shoppingCart()->delete();

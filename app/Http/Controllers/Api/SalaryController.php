@@ -22,6 +22,8 @@ class SalaryController extends Controller
         ->get();
         return response()->json($salaries);
     }
+
+
     public function Paid(Request $request, $id)
     {
         $validated = $request->validate([
@@ -56,6 +58,8 @@ class SalaryController extends Controller
 
         }
     }
+
+
     public function viewSalary($month)
     {
         $salaries = DB::table('salaries')
@@ -66,6 +70,8 @@ class SalaryController extends Controller
         return response()->json($salaries);
 
     }
+
+
     public function updateSalary(Request $request, $id)
     {
         $validated = $request->validate([

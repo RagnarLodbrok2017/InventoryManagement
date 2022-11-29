@@ -2839,8 +2839,6 @@ __webpack_require__.r(__webpack_exports__);
     this.fetchCustomers();
     this.fetchShoppingCarts();
     this.fetchPayments();
-    // this.getUser();
-    // this.refreshToken();
   },
   data: function data() {
     return {
@@ -2872,24 +2870,35 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     orderDone: function orderDone() {
+      var _this = this;
       axios.post('/api/dashboard/order', this.form).then(function (response) {
         Notification.successWithMessage('Order Done');
+        _this.fetchShoppingCarts();
+        _this.form = {
+          customer_id: null,
+          payment_id: null,
+          tax: 5,
+          discount: 0,
+          total_payment: null,
+          product_quantity: null,
+          sub_total: null
+        };
       });
     },
     getUser: function getUser() {
-      var _this = this;
+      var _this2 = this;
       axios.get('/api/auth/user').then(function (response) {
-        _this.user = response.data;
+        _this2.user = response.data;
       })["catch"](function (error) {
         // console.log(error.response.data.error);
       });
     },
     fetchProducts: function fetchProducts() {
-      var _this2 = this;
+      var _this3 = this;
       axios.get('../api/dashboard/product').then(function (response) {
-        _this2.products = response.data;
+        _this3.products = response.data;
       })["catch"](function (error) {
-        _this2.errors = error.response.errors;
+        _this3.errors = error.response.errors;
       });
     },
     editExpense: function editExpense(product) {
@@ -2900,59 +2909,61 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = "";
     },
     fetchcategories: function fetchcategories() {
-      var _this3 = this;
+      var _this4 = this;
       axios.get('../api/dashboard/category').then(function (response) {
-        _this3.categories = response.data;
+        _this4.categories = response.data;
       })["catch"](function (error) {
         Notification.error();
       });
     },
     getProductsByCategory: function getProductsByCategory(id) {
-      var _this4 = this;
+      var _this5 = this;
       axios.get('/api/dashboard/category/' + id + '/products').then(function (response) {
-        _this4.products = response.data;
+        _this5.products = response.data;
       })["catch"](function () {
-        console.log(_this4.errors);
+        console.log(_this5.errors);
       });
     },
     fetchCustomers: function fetchCustomers() {
-      var _this5 = this;
+      var _this6 = this;
       axios.get('/api/dashboard/customer').then(function (response) {
-        _this5.customers = response.data;
+        _this6.customers = response.data;
       });
     },
     addToShoppingcard: function addToShoppingcard(id) {
-      var _this6 = this;
+      var _this7 = this;
       axios.post('/api/dashboard/shoppingcart/' + id).then(function (response) {
-        Notification.successWithMessage('Product Added to ShoppingCart');
-        _this6.fetchShoppingCarts();
+        Notification.successWithMessage(response.data.message);
+        _this7.fetchShoppingCarts();
       })["catch"](function (error) {
-        Notification.error();
+        console.log(error.response.data);
       });
     },
     fetchShoppingCarts: function fetchShoppingCarts() {
-      var _this7 = this;
+      var _this8 = this;
       axios.get('/api/dashboard/shoppingcart').then(function (response) {
-        _this7.carts = response.data.carts;
-        _this7.form.product_quantity = parseFloat(response.data.product_quantity[0].product_quantity);
-        _this7.form.sub_total = response.data.sub_total[0].sub_total;
+        _this8.carts = response.data.carts;
+        if (_this8.carts.length != 0) {
+          _this8.form.product_quantity = parseFloat(response.data.product_quantity[0].product_quantity);
+          _this8.form.sub_total = response.data.sub_total[0].sub_total;
+        }
       })["catch"](function (error) {
-        _this7.errors = error.response.data.errros;
+        _this8.errors = error.response.data.errros;
       });
     },
     fetchPayments: function fetchPayments() {
-      var _this8 = this;
+      var _this9 = this;
       axios.get('/api/dashboard/payment').then(function (response) {
-        _this8.payments = response.data;
+        _this9.payments = response.data;
       })["catch"](function (error) {
         Notification.errorWithMessage('Please add a Payment Method!');
       });
     },
     removeItemFromCart: function removeItemFromCart(id) {
-      var _this9 = this;
+      var _this10 = this;
       axios["delete"]('/api/dashboard/shoppingcart/' + id).then(function (response) {
         Notification.successWithMessage('Product removed !');
-        _this9.fetchShoppingCarts();
+        _this10.fetchShoppingCarts();
       })["catch"](function () {
         Notification.error();
       });
@@ -2960,9 +2971,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     filterSearch: function filterSearch() {
-      var _this10 = this;
+      var _this11 = this;
       return this.products.filter(function (product) {
-        return product.name.toLowerCase().includes(_this10.searchTerm.toLowerCase());
+        return product.name.toLowerCase().includes(_this11.searchTerm.toLowerCase());
       });
     },
     total_payment: function total_payment() {
@@ -7878,9 +7889,9 @@ var render = function render() {
     staticClass: "list-group-item d-flex justify-content-between align-items-center"
   }, [_vm._v("Sub Total:\n                            "), _c("strong", [_vm._v(_vm._s(_vm.form.sub_total) + " $")])]), _vm._v(" "), _c("li", {
     staticClass: "list-group-item d-flex justify-content-between align-items-center"
-  }, [_vm._v("Tax:\n                            "), _c("strong", [_vm._v("\n                                " + _vm._s(_vm.form.tax) + " %\n                            ")])]), _vm._v(" "), _c("li", {
+  }, [_vm._v("Tax:\n                            "), _vm.form.tax ? _c("strong", [_vm._v("\n                                " + _vm._s(_vm.form.tax) + " %\n                            ")]) : _vm._e()]), _vm._v(" "), _c("li", {
     staticClass: "list-group-item d-flex justify-content-between align-items-center"
-  }, [_vm._v("Discount:\n                            "), _c("strong", [_vm._v("\n                                " + _vm._s(_vm.form.discount) + " %\n                            ")])]), _vm._v(" "), _c("li", {
+  }, [_vm._v("Discount:\n                            "), _vm.form.discount ? _c("strong", [_vm._v("\n                                " + _vm._s(_vm.form.discount) + " %\n                            ")]) : _vm._e()]), _vm._v(" "), _c("li", {
     staticClass: "list-group-item d-flex justify-content-between align-items-center"
   }, [_vm._v("Total :\n                            "), _c("strong", [_vm._v(_vm._s(_vm.total_payment) + " $")])])]), _vm._v(" "), _c("br"), _vm._v(" "), _c("label", [_vm._v("Customer Name")]), _vm._v(" "), _c("select", {
     directives: [{

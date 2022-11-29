@@ -72,12 +72,12 @@
                             </li>
 
                             <li class="list-group-item d-flex justify-content-between align-items-center">Tax:
-                                <strong>
+                                <strong v-if="form.tax">
                                     {{ form.tax }} %
                                 </strong>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center">Discount:
-                                <strong>
+                                <strong v-if="form.discount">
                                     {{ form.discount }} %
                                 </strong>
                             </li>
@@ -305,8 +305,6 @@ export default {
         this.fetchCustomers();
         this.fetchShoppingCarts();
         this.fetchPayments();
-        // this.getUser();
-        // this.refreshToken();
     },
     data() {
         return {
@@ -343,6 +341,16 @@ export default {
             axios.post('/api/dashboard/order', this.form)
             .then(response => {
                 Notification.successWithMessage('Order Done');
+                this.fetchShoppingCarts();
+                this.form = {
+                customer_id:null,
+                payment_id:null,
+                tax: 5,
+                discount: 0,
+                total_payment: null,
+                product_quantity: null,
+                sub_total: null,
+            };
             })
         },
         getUser() {
@@ -400,11 +408,11 @@ export default {
         addToShoppingcard(id){
             axios.post('/api/dashboard/shoppingcart/'+id)
             .then(response => {
-                Notification.successWithMessage('Product Added to ShoppingCart');
+                Notification.successWithMessage(response.data.message);
                 this.fetchShoppingCarts();
             })
             .catch(error => {
-                Notification.error();
+                console.log(error.response.data);
             })
         },
         fetchShoppingCarts()
@@ -412,8 +420,11 @@ export default {
             axios.get('/api/dashboard/shoppingcart')
             .then(response=> {
                 this.carts = response.data.carts;
-                this.form.product_quantity = parseFloat(response.data.product_quantity[0].product_quantity);
-                this.form.sub_total = response.data.sub_total[0].sub_total;
+                if(this.carts.length != 0)
+                {
+                    this.form.product_quantity = parseFloat(response.data.product_quantity[0].product_quantity);
+                    this.form.sub_total = response.data.sub_total[0].sub_total;
+                }
             })
             .catch(error => {
                 this.errors = error.response.data.errros;
